@@ -1,11 +1,288 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Compositeur | Vin</title>
+    <style>
+        :root {
+            --background: #0f1220;
+            --surface: rgba(255, 255, 255, 0.08);
+            --accent: #d2b48c;
+            --text: #f5f5f7;
+            --muted: #a6a8b8;
+            --radius: 24px;
+            font-family: Inter, system-ui, sans-serif;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            color: var(--text);
+            background: radial-gradient(circle at top left, rgba(210, 180, 140, 0.18), transparent 24%),
+                        radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.08), transparent 20%),
+                        var(--background);
+            line-height: 1.6;
+        }
+        img {
+            max-width: 100%;
+            display: block;
+        }
+        .page {
+            width: min(1180px, calc(100% - 2rem));
+            margin: 0 auto;
+            padding: 2rem 0 4rem;
+        }
+        header {
+            padding: 2rem 2rem 3rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: var(--radius);
+            background: var(--surface);
+            backdrop-filter: blur(18px);
+        }
+        .top {
+            display: grid;
+            gap: 2rem;
+            grid-template-columns: 1.5fr 1fr;
+            align-items: center;
+        }
+        h1 {
+            margin: 0;
+            font-size: clamp(2.75rem, 4vw, 4.5rem);
+            letter-spacing: -0.04em;
+        }
+        .headline {
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.4em;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+        p.lead {
+            max-width: 42rem;
+            margin: 1.5rem 0 0;
+            color: var(--muted);
+            font-size: 1.05rem;
+        }
+        .hero-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin: 2rem 0 0;
+        }
+        .hero-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1rem;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.06);
+            color: var(--text);
+            font-size: 0.95rem;
+        }
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.95rem 1.6rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: linear-gradient(135deg, rgba(210, 180, 140, 0.16), rgba(255,255,255,0.05));
+            color: var(--text);
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.16);
+        }
+        .hero-image {
+            width: 100%;
+            min-height: 320px;
+            border-radius: 28px;
+            overflow: hidden;
+            background: linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .hero-image::before {
+            content: "";
+            display: block;
+            padding-top: 62%;
+        }
+        .section-grid {
+            display: grid;
+            gap: 2rem;
+        }
+        @media (max-width: 840px) {
+            .top {
+                grid-template-columns: 1fr;
+            }
+        }
+        .intro-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1.5rem;
+        }
+        @media (max-width: 720px) {
+            .intro-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .card {
+            padding: 2rem;
+            border-radius: 28px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .section-title {
+            margin: 0 0 1rem;
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
+        }
+        .card p,
+        .card li {
+            color: var(--muted);
+        }
+        .works {
+            display: grid;
+            gap: 1.2rem;
+        }
+        .work-item {
+            display: grid;
+            gap: 0.85rem;
+            padding: 1.4rem 1.5rem;
+            border-radius: 22px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .work-item strong {
+            color: var(--text);
+            font-size: 1rem;
+            display: block;
+        }
+        .work-item span {
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+        .event-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 1rem;
+        }
+        .event-item {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 1rem;
+            padding: 1.3rem 1.4rem;
+            border-radius: 22px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.04);
+        }
+        .event-date {
+            color: var(--accent);
+            font-weight: 700;
+            min-width: 5.5rem;
+        }
+        footer {
+            margin-top: 3rem;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+    </style>
 </head>
 <body>
-    Vin
+    <main class="page">
+        <header>
+            <section class="top">
+                <div>
+                    <span class="headline">Compositeur contemporain</span>
+                    <h1>Vin, créateur d'ambiances musicales</h1>
+                    <p class="lead">Écrivain de textures sonores, Vin compose pour orchestres, théâtre et projets multimédias. Son univers mêle profondeur orchestrale, mélodies chaleureuses et une narration musicale unique.</p>
+                    <div class="hero-meta">
+                        <span>Éclectique</span>
+                        <span>Collaboratif</span>
+                        <span>Concerts live</span>
+                    </div>
+                    <div style="margin-top: 2rem; display:flex; gap:1rem; flex-wrap:wrap;">
+                        <a class="button" href="#works">Œuvres</a>
+                        <a class="button" href="#contact">Contact</a>
+                    </div>
+                </div>
+                <div class="hero-image" aria-label="Illustration musicale"></div>
+            </section>
+        </header>
+
+        <section class="section-grid">
+            <div class="intro-grid">
+                <article class="card">
+                    <h2 class="section-title">À propos</h2>
+                    <p>Issu d'une formation classique et attiré par les paysages sonores modernes, Vin explore les genres avec résonance et élégance. Ses compositions ont été jouées en France et à l'international, dans des productions de cinéma, de danse contemporaine et d'événements immersifs.</p>
+                </article>
+                <article class="card">
+                    <h2 class="section-title">Pourquoi choisir Vin</h2>
+                    <ul style="padding-left:1rem; margin:0; list-style:disc;">
+                        <li>Approche narrative forte</li>
+                        <li>Sensibilité orchestral et électronique</li>
+                        <li>Réactivité aux projets créatifs</li>
+                    </ul>
+                </article>
+            </div>
+
+            <section id="works" class="card">
+                <h2 class="section-title">Sélection d'œuvres</h2>
+                <div class="works">
+                    <div class="work-item">
+                        <strong>"Nuit des Lumières"</strong>
+                        <span>Orchestre symphonique | Spectacle immersif</span>
+                    </div>
+                    <div class="work-item">
+                        <strong>"Pulsations urbaines"</strong>
+                        <span>Musique électronique & cordes | Installation</span>
+                    </div>
+                    <div class="work-item">
+                        <strong>"Lignes de temps"</strong>
+                        <span>Musique de scène pour danse contemporaine</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2 class="section-title">Prochains événements</h2>
+                <ul class="event-list">
+                    <li class="event-item">
+                        <span class="event-date">14 Juin</span>
+                        <div>
+                            <strong>Concert symphonique</strong>
+                            <p>Théâtre de la Ville, Paris — création mondiale.</p>
+                        </div>
+                    </li>
+                    <li class="event-item">
+                        <span class="event-date">03 Juil</span>
+                        <div>
+                            <strong>Projection musicale</strong>
+                            <p>Festival Sonore — performance audiovisuelle.</p>
+                        </div>
+                    </li>
+                </ul>
+            </section>
+
+            <section id="contact" class="card">
+                <h2 class="section-title">Contact</h2>
+                <p>Pour une collaboration, une commande ou une session de création, contactez-moi par e-mail ou via les réseaux.</p>
+                <p style="margin-top:1rem; color: var(--text);">contact@vincompositeur.fr</p>
+            </section>
+        </section>
+
+        <footer>
+            © 2026 Vin — Compositeur | Musique originale, partitions et création sonore.
+        </footer>
+    </main>
 </body>
 </html>
