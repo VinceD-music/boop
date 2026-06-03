@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio | Compositeur / Composer</title>
+    <title>Portfolio | Vincent Desrochers (VinceD)</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         /* --- VARIABLES & RESET --- */
         :root {
-            --primary-blue: #4A90E2;
-            --light-blue: #A9D0F5;
-            --text-dark: #2C3E50;
-            --text-light: #596A7B;
+            --primary-blue: #1E40AF; /* Bleu plus foncé et intense */
+            --light-blue: #60A5FA;
+            --text-dark: #1E293B;
+            --text-light: #475569;
             --bg-glass: rgba(255, 255, 255, 0.75);
-            --border-glass: rgba(255, 255, 255, 0.5);
-            --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+            --border-glass: rgba(255, 255, 255, 0.6);
+            --shadow-glass: 0 8px 32px 0 rgba(30, 41, 59, 0.05);
         }
 
         * {
@@ -29,16 +29,9 @@
         body {
             font-family: 'Inter', sans-serif;
             color: var(--text-dark);
-            background-color: #f8fbff;
-            /* Nuages et lumière bleue perçante */
-            background-image: 
-                radial-gradient(circle at 15% 20%, rgba(169, 208, 245, 0.5) 0%, transparent 40%),
-                radial-gradient(circle at 85% 30%, rgba(74, 144, 226, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 50% 80%, rgba(255, 255, 255, 0.8) 0%, transparent 60%),
-                radial-gradient(circle at 70% 90%, rgba(169, 208, 245, 0.3) 0%, transparent 50%);
-            background-attachment: fixed;
             line-height: 1.6;
             overflow-x: hidden;
+            background-color: #fdfeff;
         }
 
         h1, h2, h3 {
@@ -48,6 +41,33 @@
 
         a { text-decoration: none; color: inherit; }
         ul { list-style: none; }
+
+        /* --- EFFET DE NUAGES ET LUMIÈRE PERÇANTE --- */
+        .cloud-container {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+            background: #f6f9fc;
+        }
+        .cloud-layer {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.95);
+            filter: blur(50px);
+        }
+        .c1 { width: 800px; height: 500px; top: -10%; left: -5%; }
+        .c2 { width: 1000px; height: 600px; bottom: -10%; right: -10%; }
+        .c3 { width: 700px; height: 400px; top: 40%; left: 25%; background: rgba(248, 250, 252, 0.9); }
+        
+        .blue-light {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(30, 64, 175, 0.18) 0%, transparent 70%);
+            filter: blur(40px);
+        }
+        .l1 { width: 600px; height: 600px; top: 10%; right: 15%; }
+        .l2 { width: 800px; height: 800px; bottom: 15%; left: 5%; }
 
         /* --- NAVIGATION --- */
         nav {
@@ -63,6 +83,11 @@
             border-bottom: 1px solid var(--border-glass);
             z-index: 1000;
             transition: all 0.3s ease;
+        }
+
+        .logo {
+            font-size: 1.3rem;
+            letter-spacing: 0.5px;
         }
 
         .nav-links {
@@ -112,7 +137,7 @@
             font-size: 4.5rem;
             margin-bottom: 1rem;
             color: var(--text-dark);
-            text-shadow: 0 4px 15px rgba(255,255,255,0.8);
+            text-shadow: 0 4px 20px rgba(255,255,255,0.9);
         }
 
         .hero-tagline {
@@ -130,13 +155,13 @@
             border-radius: 30px;
             font-size: 1.1rem;
             font-weight: 600;
-            box-shadow: 0 10px 20px rgba(74, 144, 226, 0.3);
+            box-shadow: 0 10px 20px rgba(30, 64, 175, 0.25);
             transition: transform 0.3s, box-shadow 0.3s;
         }
 
         .cta-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 15px 25px rgba(74, 144, 226, 0.4);
+            box-shadow: 0 15px 25px rgba(30, 64, 175, 0.35);
         }
 
         /* --- SECTIONS GLOBALES --- */
@@ -185,7 +210,7 @@
         .about-img {
             width: 100%;
             aspect-ratio: 1/1;
-            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
             border-radius: 20px;
             box-shadow: var(--shadow-glass);
             display: flex;
@@ -193,6 +218,7 @@
             align-items: center;
             color: var(--primary-blue);
             font-size: 3rem;
+            border: 1px solid var(--border-glass);
         }
 
         /* --- AUDIO PORTFOLIO --- */
@@ -227,7 +253,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4);
+            box-shadow: 0 4px 15px rgba(30, 64, 175, 0.3);
             transition: transform 0.2s;
         }
         .play-pause-btn:hover { transform: scale(1.05); }
@@ -281,7 +307,7 @@
         }
 
         .playlist-item:hover, .playlist-item.active {
-            background: rgba(74, 144, 226, 0.1);
+            background: rgba(30, 64, 175, 0.08);
         }
 
         /* --- VIDEO PORTFOLIO --- */
@@ -302,12 +328,12 @@
         .video-placeholder {
             width: 100%;
             aspect-ratio: 16/9;
-            background: #e1e8ed;
+            background: #e2e8f0;
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: 3rem;
-            color: rgba(0,0,0,0.2);
+            color: rgba(0,0,0,0.15);
             position: relative;
         }
         
@@ -377,7 +403,7 @@
             transition: background 0.3s;
         }
 
-        button[type="submit"]:hover { background: #357ABD; }
+        button[type="submit"]:hover { background: #1D4ED8; }
 
         .social-links {
             display: flex;
@@ -404,7 +430,7 @@
 
         /* --- RESPONSIVE --- */
         @media(max-width: 768px) {
-            .nav-links { display: none; } /* On cache les liens sur mobile pour simplifier, on garde juste le FR/EN */
+            .nav-links { display: none; }
             .about-grid { grid-template-columns: 1fr; }
             .hero-title { font-size: 3rem; }
             section { padding: 4rem 5%; }
@@ -413,8 +439,16 @@
 </head>
 <body>
 
+    <div class="cloud-container">
+        <div class="cloud-layer c1"></div>
+        <div class="cloud-layer c2"></div>
+        <div class="cloud-layer c3"></div>
+        <div class="blue-light l1"></div>
+        <div class="blue-light l2"></div>
+    </div>
+
     <nav>
-        <div class="logo"><strong class="i18n" data-fr="MonPortfolio." data-en="MyPortfolio.">MonPortfolio.</strong></div>
+        <div class="logo"><strong>VinceD</strong></div>
         <div class="nav-links">
             <a href="#about" class="i18n" data-fr="À propos" data-en="About">À propos</a>
             <a href="#audio" class="i18n" data-fr="Audio" data-en="Audio">Audio</a>
@@ -426,7 +460,7 @@
     </nav>
 
     <section id="hero">
-        <h1 class="hero-title fade-in">Élias Dubois</h1>
+        <h1 class="hero-title fade-in">Vincent Desrochers</h1>
         <h2 class="hero-tagline fade-in i18n" 
             data-fr="Compositeur polyvalent pour l'image. Des notes qui racontent votre histoire." 
             data-en="Versatile media composer. Notes that tell your story.">
@@ -443,7 +477,7 @@
         <h2 class="section-title i18n" data-fr="À propos" data-en="About Me">À propos</h2>
         <div class="about-grid">
             <div class="about-img">
-                <i class="fa-solid fa-camera"></i>
+                <i class="fa-solid fa-music"></i>
             </div>
             <div>
                 <p class="i18n" style="margin-bottom: 1.5rem;" 
@@ -479,8 +513,7 @@
             <div class="playlist" id="playlist">
                 </div>
         </div>
-        <audio id="audioElement" ontimeupdate="updateProgress()" onended="nextTrack()">
-            </audio>
+        <audio id="audioElement" ontimeupdate="updateProgress()" onended="nextTrack()"></audio>
     </section>
 
     <section id="video" class="fade-in">
@@ -546,7 +579,8 @@
                         <option value="" disabled selected class="i18n" data-fr="Type de projet..." data-en="Project type...">Type de projet...</option>
                         <option class="i18n" data-fr="Jeu Vidéo" data-en="Video Game">Jeu Vidéo</option>
                         <option class="i18n" data-fr="Cinéma / Court-métrage" data-en="Film / Short Film">Cinéma / Court-métrage</option>
-                        <option class="i18n" data-fr="Publicité / Autre" data-en="Commercial / Other">Publicité / Autre</option>
+                        <option class="i18n" data-fr="Publicité" data-en="Commercial">Publicité</option>
+                        <option class="i18n" data-fr="Autre" data-en="Other">Autre</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -565,28 +599,24 @@
     </section>
 
     <footer>
-        <p class="i18n" data-fr="© 2026 Élias Dubois. Tous droits réservés." data-en="© 2026 Élias Dubois. All rights reserved.">© 2026 Élias Dubois. Tous droits réservés.</p>
+        <p class="i18n" data-fr="© 2026 VinceD. Tous droits réservés." data-en="© 2026 VinceD. All rights reserved.">© 2026 VinceD. Tous droits réservés.</p>
     </footer>
 
     <script>
-        // --- GESTION DE LA LANGUE (Bilingue) ---
+        // --- GESTION DE LA LANGUE ---
         let currentLang = 'fr';
         
         function toggleLanguage() {
             currentLang = currentLang === 'fr' ? 'en' : 'fr';
             document.querySelector('.lang-switch').textContent = currentLang === 'fr' ? 'EN' : 'FR';
             
-            // Textes normaux
             document.querySelectorAll('.i18n').forEach(el => {
                 el.textContent = el.getAttribute(`data-${currentLang}`);
             });
-            // Placeholders des inputs
             document.querySelectorAll('.i18n-placeholder').forEach(el => {
                 el.setAttribute('placeholder', el.getAttribute(`data-${currentLang}`));
             });
-            // Mise à jour de la catégorie de la piste en cours
             updateCurrentTrackCategoryLanguage();
-            // Re-rendre la playlist
             renderPlaylist();
         }
 
@@ -601,8 +631,7 @@
 
         document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-        // --- CUSTOM AUDIO PLAYER ---
-        // Utilisation d'un fichier audio libre de droits de w3schools comme placeholder universel
+        // --- LECTEUR AUDIO SANS DROITS AUDIO PLACEHOLDER ---
         const placeholderAudio = "https://www.w3schools.com/html/horse.mp3";
         
         const tracks = [
@@ -692,7 +721,6 @@
         // Initialisation
         loadTrack(0);
         renderPlaylist();
-
     </script>
 </body>
 </html>
