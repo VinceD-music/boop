@@ -3,330 +3,696 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vincent Desrochers | Compositeur</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <title>Portfolio | Compositeur / Composer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap');
-        
-        body {
-            font-family: 'Inter', system_ui, sans-serif;
-        }
-        
-        .heading-font {
-            font-family: 'Playfair Display', sans-serif;
+        /* --- VARIABLES & RESET --- */
+        :root {
+            --primary-blue: #4A90E2;
+            --light-blue: #A9D0F5;
+            --text-dark: #2C3E50;
+            --text-light: #596A7B;
+            --bg-glass: rgba(255, 255, 255, 0.75);
+            --border-glass: rgba(255, 255, 255, 0.5);
+            --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
         }
 
-        /* === FOND NUAGEUX IMMERSIF === */
-        .cloud-bg {
-            background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 35%, #bae6fd 65%, #7dd3fc 100%);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--text-dark);
+            background-color: #f8fbff;
+            /* Nuages et lumière bleue perçante */
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(169, 208, 245, 0.5) 0%, transparent 40%),
+                radial-gradient(circle at 85% 30%, rgba(74, 144, 226, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 80%, rgba(255, 255, 255, 0.8) 0%, transparent 60%),
+                radial-gradient(circle at 70% 90%, rgba(169, 208, 245, 0.3) 0%, transparent 50%);
+            background-attachment: fixed;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--bg-glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-glass);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--primary-blue); }
+
+        .lang-switch {
+            background: none;
+            border: 1px solid var(--primary-blue);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            color: var(--primary-blue);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lang-switch:hover {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        /* --- HERO SECTION --- */
+        #hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .hero-title {
+            font-size: 4.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+            text-shadow: 0 4px 15px rgba(255,255,255,0.8);
+        }
+
+        .hero-tagline {
+            font-size: 1.5rem;
+            color: var(--text-light);
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+            max-width: 600px;
+        }
+
+        .cta-btn {
+            padding: 1rem 2.5rem;
+            background: var(--primary-blue);
+            color: white;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            box-shadow: 0 10px 20px rgba(74, 144, 226, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(74, 144, 226, 0.4);
+        }
+
+        /* --- SECTIONS GLOBALES --- */
+        section {
+            padding: 6rem 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
             position: relative;
-            overflow: hidden;
         }
-        
-        .cloud-bg::before,
-        .cloud-bg::after,
-        .cloud-bg::after ~ .cloud-layer {
+
+        .section-title::after {
             content: '';
-            position: absolute;
-            inset: -50%;
-            background: radial-gradient(circle at 30% 40%, rgba(147, 197, 253, 0.45) 0%, transparent 50%),
-                        radial-gradient(circle at 70% 65%, rgba(165, 243, 252, 0.35) 0%, transparent 55%);
-            animation: cloud-drift 140s linear infinite;
-            opacity: 0.75;
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: var(--primary-blue);
+            margin: 1rem auto 0;
+            border-radius: 2px;
         }
-        
-        .cloud-bg::after {
-            background: radial-gradient(circle at 20% 70%, rgba(224, 242, 254, 0.6) 0%, transparent 60%);
-            animation-delay: -45s;
-            animation-duration: 180s;
-        }
-        
-        .cloud-layer {
-            background: radial-gradient(circle at 50% 30%, rgba(255,255,255,0.9) 0%, transparent 40%),
-                        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.85) 0%, transparent 45%);
-            animation: subtle-cloud 90s ease-in-out infinite alternate;
-        }
-        
-        @keyframes cloud-drift {
-            0% { transform: translate(0, 0) rotate(1deg); }
-            100% { transform: translate(60px, 80px) rotate(-2deg); }
-        }
-        
-        @keyframes subtle-cloud {
-            from { transform: translate(0, 0); }
-            to { transform: translate(25px, 35px); }
-        }
-        
-        .hero-bg {
-            background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
-        }
-        
-        .nav-link {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .nav-link:hover {
-            color: rgb(59 130 246);
-            transform: translateY(-2px);
-        }
-        
-        .audio-track:hover {
-            transform: translateX(8px);
-            background-color: #f1f5f9;
-        }
-        
-        .playing {
-            background-color: #dbeafe;
-            border-left: 4px solid rgb(59 130 246);
-        }
-        
+
+        /* --- ANIMATIONS SCROLL --- */
         .fade-in {
             opacity: 0;
             transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         }
-        
         .fade-in.visible {
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* --- ABOUT --- */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-radius: 20px;
+            box-shadow: var(--shadow-glass);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--primary-blue);
+            font-size: 3rem;
+        }
+
+        /* --- AUDIO PORTFOLIO --- */
+        .audio-container {
+            background: var(--bg-glass);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-glass);
+        }
+
+        .player-now-playing {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .play-pause-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.4);
+            transition: transform 0.2s;
+        }
+        .play-pause-btn:hover { transform: scale(1.05); }
+
+        .track-info { flex: 1; }
+        .track-title { font-weight: 600; font-size: 1.2rem; }
+        .track-category { font-size: 0.9rem; color: var(--text-light); }
+
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(0,0,0,0.1);
+            border-radius: 3px;
+            margin-top: 10px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--primary-blue);
+            border-radius: 3px;
+            width: 0%;
+            position: relative;
+        }
+        
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            right: -5px;
+            top: -4px;
+            width: 14px;
+            height: 14px;
+            background: white;
+            border: 2px solid var(--primary-blue);
+            border-radius: 50%;
+        }
+
+        .playlist {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .playlist-item {
+            padding: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            transition: background 0.2s;
+        }
+
+        .playlist-item:hover, .playlist-item.active {
+            background: rgba(74, 144, 226, 0.1);
+        }
+
+        /* --- VIDEO PORTFOLIO --- */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .video-card {
+            background: var(--bg-glass);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow-glass);
+            border: 1px solid var(--border-glass);
+        }
+
+        .video-placeholder {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #e1e8ed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            color: rgba(0,0,0,0.2);
+            position: relative;
+        }
+        
+        .video-info {
+            padding: 1.5rem;
+        }
+
+        /* --- SERVICES --- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: var(--bg-glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-glass);
+            padding: 2.5rem 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: var(--shadow-glass);
+            transition: transform 0.3s;
+        }
+
+        .service-card:hover { transform: translateY(-10px); }
+        .service-icon { font-size: 2.5rem; color: var(--primary-blue); margin-bottom: 1.5rem; }
+
+        /* --- CONTACT --- */
+        .contact-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--bg-glass);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-glass);
+            border: 1px solid var(--border-glass);
+        }
+
+        .form-group { margin-bottom: 1.5rem; }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 8px;
+            background: rgba(255,255,255,0.8);
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button[type="submit"]:hover { background: #357ABD; }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .social-links a {
+            font-size: 1.8rem;
+            color: var(--text-light);
+            transition: color 0.3s;
+        }
+        .social-links a:hover { color: var(--primary-blue); }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+
+        /* --- RESPONSIVE --- */
+        @media(max-width: 768px) {
+            .nav-links { display: none; } /* On cache les liens sur mobile pour simplifier, on garde juste le FR/EN */
+            .about-grid { grid-template-columns: 1fr; }
+            .hero-title { font-size: 3rem; }
+            section { padding: 4rem 5%; }
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800">
+<body>
 
-    <!-- NAVBAR -->
-    <nav class="fixed top-0 left-0 right-0 bg-white/90 backdrop-blur-md border-b border-slate-200 z-50">
-        <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-9 h-9 bg-blue-600 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-inner">VD</div>
-                <span class="heading-font text-2xl font-semibold tracking-tight">Vincent Desrochers</span>
-            </div>
-            
-            <div class="hidden md:flex items-center gap-8 text-sm font-medium">
-                <a href="#about" onclick="navigateTo('about')" class="nav-link text-slate-600 hover:text-blue-600">À propos / About</a>
-                <a href="#audio" onclick="navigateTo('audio')" class="nav-link text-slate-600 hover:text-blue-600">Portfolio Audio</a>
-                <a href="#video" onclick="navigateTo('video')" class="nav-link text-slate-600 hover:text-blue-600">Portfolio Vidéo</a>
-                <a href="#services" onclick="navigateTo('services')" class="nav-link text-slate-600 hover:text-blue-600">Services</a>
-                <a href="#contact" onclick="navigateTo('contact')" class="nav-link text-slate-600 hover:text-blue-600">Contact</a>
-            </div>
-            
-            <div class="flex items-center gap-4">
-                <button onclick="toggleLanguage()" id="lang-toggle"
-                        class="px-4 py-2 text-sm font-medium border border-slate-300 rounded-full hover:border-blue-300 transition-colors flex items-center gap-2">
-                    <span id="current-lang">FR</span>
-                    <i class="fas fa-exchange-alt text-xs"></i>
-                </button>
-                
-                <button onclick="document.getElementById('contact').scrollIntoView({ behavior: 'smooth' })"
-                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-2xl text-sm font-medium transition-all flex items-center gap-2">
-                    <i class="fas fa-paper-plane"></i>
-                    <span id="nav-cta">Me contacter</span>
-                </button>
-            </div>
+    <nav>
+        <div class="logo"><strong class="i18n" data-fr="MonPortfolio." data-en="MyPortfolio.">MonPortfolio.</strong></div>
+        <div class="nav-links">
+            <a href="#about" class="i18n" data-fr="À propos" data-en="About">À propos</a>
+            <a href="#audio" class="i18n" data-fr="Audio" data-en="Audio">Audio</a>
+            <a href="#video" class="i18n" data-fr="Vidéo" data-en="Video">Vidéo</a>
+            <a href="#services" class="i18n" data-fr="Services" data-en="Services">Services</a>
+            <a href="#contact" class="i18n" data-fr="Contact" data-en="Contact">Contact</a>
         </div>
+        <button class="lang-switch" onclick="toggleLanguage()">EN</button>
     </nav>
 
-    <!-- HERO -->
-    <section id="hero" class="cloud-bg hero-bg min-h-screen flex items-center pt-20">
-        <div class="cloud-layer"></div>
-        
-        <div class="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-16 items-center">
-            <div class="space-y-8 fade-in">
-                <div class="inline-flex items-center gap-2 bg-white/70 backdrop-blur px-5 py-2 rounded-3xl border border-blue-100">
-                    <div class="w-3 h-3 bg-emerald-400 rounded-full animate-pulse"></div>
-                    <span id="hero-status" class="text-sm font-medium text-slate-600">Compositeur • Étudiant en musique à l'image</span>
-                </div>
-                
-                <h1 id="hero-title" class="heading-font text-7xl md:text-8xl font-bold leading-none tracking-tighter text-slate-900">
-                    Vincent<br>Desrochers
-                </h1>
-                
-                <p id="hero-tagline" class="text-2xl text-slate-600 max-w-md leading-tight">
-                    Créer des univers sonores qui racontent des histoires
+    <section id="hero">
+        <h1 class="hero-title fade-in">Élias Dubois</h1>
+        <h2 class="hero-tagline fade-in i18n" 
+            data-fr="Compositeur polyvalent pour l'image. Des notes qui racontent votre histoire." 
+            data-en="Versatile media composer. Notes that tell your story.">
+            Compositeur polyvalent pour l'image. Des notes qui racontent votre histoire.
+        </h2>
+        <a href="#audio" class="cta-btn fade-in i18n" 
+           data-fr="Écouter mon travail" 
+           data-en="Listen to my work">
+           Écouter mon travail
+        </a>
+    </section>
+
+    <section id="about" class="fade-in">
+        <h2 class="section-title i18n" data-fr="À propos" data-en="About Me">À propos</h2>
+        <div class="about-grid">
+            <div class="about-img">
+                <i class="fa-solid fa-camera"></i>
+            </div>
+            <div>
+                <p class="i18n" style="margin-bottom: 1.5rem;" 
+                   data-fr="Étudiant passionné en composition pour l'image, je crée des univers sonores immersifs pour le jeu vidéo, le cinéma, les documentaires et le motion design. Mon approche allie orchestration classique et textures synthétiques modernes."
+                   data-en="Passionate student in media composition, I create immersive soundscapes for video games, film, documentaries, and motion design. My approach blends classical orchestration with modern synthetic textures.">
+                   Étudiant passionné en composition pour l'image, je crée des univers sonores immersifs pour le jeu vidéo, le cinéma, les documentaires et le motion design. Mon approche allie orchestration classique et textures synthétiques modernes.
                 </p>
-                
-                <div class="flex items-center gap-4">
-                    <button onclick="document.getElementById('audio').scrollIntoView({ behavior: 'smooth' })" 
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-3xl font-medium flex items-center gap-3 text-lg transition-all shadow-lg shadow-blue-200">
-                        <i class="fas fa-headphones"></i>
-                        <span id="hero-cta">Écouter mon travail</span>
-                    </button>
-                    
-                    <a href="#about" onclick="navigateTo('about')"
-                       class="border border-slate-300 hover:border-slate-400 px-8 py-4 rounded-3xl font-medium transition-all">
-                        En savoir plus
-                    </a>
+                <h3 class="i18n" style="margin-bottom: 1rem;" data-fr="Parcours Académique" data-en="Academic Background">Parcours Académique</h3>
+                <ul>
+                    <li><strong>2023 - Présent :</strong> <span class="i18n" data-fr="Master en Musique Appliquée aux Arts Visuels (MAAAV)" data-en="Master in Applied Music for Visual Arts">Master en Musique Appliquée aux Arts Visuels (MAAAV)</span></li>
+                    <li><strong>2020 - 2023 :</strong> <span class="i18n" data-fr="Licence Musicologie, Conservatoire National" data-en="Bachelor in Musicology, National Conservatory">Licence Musicologie, Conservatoire National</span></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="audio" class="fade-in">
+        <h2 class="section-title i18n" data-fr="Portfolio Audio" data-en="Audio Portfolio">Portfolio Audio</h2>
+        <div class="audio-container">
+            <div class="player-now-playing">
+                <button class="play-pause-btn" id="playBtn" onclick="togglePlay()">
+                    <i class="fa-solid fa-play" id="playIcon"></i>
+                </button>
+                <div class="track-info">
+                    <div class="track-title" id="currentTitle">Epic Quest - Main Theme</div>
+                    <div class="track-category i18n" id="currentCat" data-fr="Jeu Vidéo" data-en="Video Game">Jeu Vidéo</div>
+                    <div class="progress-container" id="progressContainer" onclick="seek(event)">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
                 </div>
             </div>
             
-            <div class="relative fade-in">
-                <div class="aspect-square bg-gradient-to-br from-blue-100 to-sky-200 rounded-[4rem] overflow-hidden shadow-2xl shadow-blue-300/30 relative">
-                    <img src="https://picsum.photos/id/1015/800/800" alt="Vincent Desrochers" 
-                         class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+            <div class="playlist" id="playlist">
+                </div>
+        </div>
+        <audio id="audioElement" ontimeupdate="updateProgress()" onended="nextTrack()">
+            </audio>
+    </section>
+
+    <section id="video" class="fade-in">
+        <h2 class="section-title i18n" data-fr="Portfolio Vidéo" data-en="Video Portfolio">Portfolio Vidéo</h2>
+        <div class="video-grid">
+            <div class="video-card">
+                <div class="video-placeholder"><i class="fa-brands fa-youtube"></i></div>
+                <div class="video-info">
+                    <h3 class="i18n" data-fr="Court-métrage : L'Éclipse" data-en="Short Film: The Eclipse">Court-métrage : L'Éclipse</h3>
+                    <p class="i18n" data-fr="Musique originale - Orchestre à cordes" data-en="Original Score - String Orchestra">Musique originale - Orchestre à cordes</p>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="video-placeholder"><i class="fa-brands fa-vimeo-v"></i></div>
+                <div class="video-info">
+                    <h3 class="i18n" data-fr="Publicité : TechWave" data-en="Commercial: TechWave">Publicité : TechWave</h3>
+                    <p class="i18n" data-fr="Sound design & musique électronique" data-en="Sound design & electronic music">Sound design & musique électronique</p>
+                </div>
+            </div>
+            <div class="video-card">
+                <div class="video-placeholder"><i class="fa-solid fa-film"></i></div>
+                <div class="video-info">
+                    <h3 class="i18n" data-fr="Gameplay : Space Explorer" data-en="Gameplay: Space Explorer">Gameplay : Space Explorer</h3>
+                    <p class="i18n" data-fr="Bande-son adaptative (FMOD)" data-en="Adaptive Soundtrack (FMOD)">Bande-son adaptative (FMOD)</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- À PROPOS -->
-    <section id="about" class="section py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="grid md:grid-cols-12 gap-16">
-                <div class="md:col-span-5 fade-in">
-                    <div class="sticky top-28">
-                        <div class="bg-slate-100 rounded-3xl overflow-hidden shadow-xl">
-                            <img src="https://picsum.photos/id/1015/800/1000" alt="Vincent Desrochers" class="w-full h-full object-cover">
-                        </div>
-                    </div>
-                </div>
-                <div class="md:col-span-7 space-y-10">
-                    <div>
-                        <span class="uppercase tracking-widest text-blue-600 text-sm font-medium">À propos / About</span>
-                        <h2 id="about-title" class="heading-font text-5xl font-semibold mt-3 leading-tight">
-                            Compositeur passionné par l'image
-                        </h2>
-                    </div>
-                    <div id="about-text" class="prose text-lg leading-relaxed text-slate-600 max-w-none">
-                        <p>Étudiant en composition pour médias à l'Université de Montréal, je crée des bandes sonores originales pour jeux vidéo, films, publicités et documentaires.</p>
-                        <p>Ma musique mélange orchestre symphonique, synthétiseurs modernes et textures électroniques pour donner vie aux émotions visuelles.</p>
-                    </div>
-                </div>
+    <section id="services" class="fade-in">
+        <h2 class="section-title i18n" data-fr="Mes Services" data-en="My Services">Mes Services</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <i class="fa-solid fa-gamepad service-icon"></i>
+                <h3 class="i18n" data-fr="Jeux Vidéo" data-en="Video Games">Jeux Vidéo</h3>
+                <p class="i18n" data-fr="Musique adaptative, boucles fluides et intégration middleware (FMOD/Wwise)." data-en="Adaptive music, seamless loops, and middleware integration (FMOD/Wwise).">Musique adaptative, boucles fluides et intégration middleware (FMOD/Wwise).</p>
+            </div>
+            <div class="service-card">
+                <i class="fa-solid fa-clapperboard service-icon"></i>
+                <h3 class="i18n" data-fr="Cinéma & Court-métrage" data-en="Film & Short Films">Cinéma & Court-métrage</h3>
+                <p class="i18n" data-fr="Bande originale sur mesure, synchronisation parfaite avec l'image (scoring)." data-en="Custom original soundtracks, perfect synchronization with the picture (scoring).">Bande originale sur mesure, synchronisation parfaite avec l'image (scoring).</p>
+            </div>
+            <div class="service-card">
+                <i class="fa-solid fa-bezier-curve service-icon"></i>
+                <h3 class="i18n" data-fr="Publicité & Motion Design" data-en="Ads & Motion Design">Publicité & Motion Design</h3>
+                <p class="i18n" data-fr="Musiques percutantes et sound design pour capter l'attention en quelques secondes." data-en="Impactful music and sound design to capture attention in seconds.">Musiques percutantes et sound design pour capter l'attention en quelques secondes.</p>
             </div>
         </div>
     </section>
 
-    <!-- AUDIO PORTFOLIO -->
-    <section id="audio" class="section py-24 bg-slate-50">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="flex justify-between items-end mb-12">
-                <div>
-                    <span class="text-blue-600 font-medium">PORTFOLIO</span>
-                    <h2 id="audio-title" class="heading-font text-5xl font-semibold">Œuvres Audio</h2>
+    <section id="contact" class="fade-in">
+        <h2 class="section-title i18n" data-fr="Contact" data-en="Contact Me">Contact</h2>
+        <div class="contact-container">
+            <form action="#" method="POST" onsubmit="event.preventDefault(); alert('Message envoyé ! / Message sent!');">
+                <div class="form-group">
+                    <input type="text" class="i18n-placeholder" data-fr="Votre nom" data-en="Your Name" placeholder="Votre nom" required>
                 </div>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-8" id="audio-playlist"></div>
-            
-            <div id="player" class="mt-16 bg-white rounded-3xl shadow-xl p-8 hidden">
-                <div class="flex items-center gap-6">
-                    <button onclick="togglePlay()" id="play-btn" class="w-14 h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl flex items-center justify-center text-2xl transition-all">
-                        <i class="fas fa-play"></i>
-                    </button>
-                    <div class="flex-1">
-                        <div id="now-playing" class="font-medium">Sélectionnez une piste...</div>
-                        <div id="progress-container" class="h-1 bg-slate-200 rounded-full mt-4 cursor-pointer">
-                            <div id="progress-bar" class="absolute h-1 bg-blue-600 rounded-full w-0"></div>
-                        </div>
-                    </div>
+                <div class="form-group">
+                    <input type="email" class="i18n-placeholder" data-fr="Votre adresse email" data-en="Your Email" placeholder="Votre adresse email" required>
                 </div>
+                <div class="form-group">
+                    <select required>
+                        <option value="" disabled selected class="i18n" data-fr="Type de projet..." data-en="Project type...">Type de projet...</option>
+                        <option class="i18n" data-fr="Jeu Vidéo" data-en="Video Game">Jeu Vidéo</option>
+                        <option class="i18n" data-fr="Cinéma / Court-métrage" data-en="Film / Short Film">Cinéma / Court-métrage</option>
+                        <option class="i18n" data-fr="Publicité / Autre" data-en="Commercial / Other">Publicité / Autre</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <textarea rows="5" class="i18n-placeholder" data-fr="Votre message" data-en="Your Message" placeholder="Votre message" required></textarea>
+                </div>
+                <button type="submit" class="i18n" data-fr="Envoyer le message" data-en="Send Message">Envoyer le message</button>
+            </form>
+            
+            <div class="social-links">
+                <a href="#"><i class="fa-brands fa-soundcloud"></i></a>
+                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                <a href="#"><i class="fa-brands fa-linkedin"></i></a>
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
             </div>
         </div>
     </section>
 
-    <!-- VIDÉO, SERVICES, CONTACT restent identiques à la première version -->
-    <!-- (Pour ne pas surcharger le message, je les ai gardés intacts) -->
+    <footer>
+        <p class="i18n" data-fr="© 2026 Élias Dubois. Tous droits réservés." data-en="© 2026 Élias Dubois. All rights reserved.">© 2026 Élias Dubois. Tous droits réservés.</p>
+    </footer>
 
     <script>
-        // === SCRIPT COMPLET DE LA PREMIÈRE VERSION ===
+        // --- GESTION DE LA LANGUE (Bilingue) ---
         let currentLang = 'fr';
         
-        const translations = {
-            fr: {
-                'hero-status': 'Compositeur • Étudiant en musique à l\'image',
-                'hero-title': 'Vincent<br>Desrochers',
-                'hero-tagline': 'Créer des univers sonores qui racontent des histoires',
-                'hero-cta': 'Écouter mon travail',
-                'nav-cta': 'Me contacter',
-                'about-title': 'Compositeur passionné par l\'image',
-                'about-text': `<p>Étudiant en composition pour médias à l'Université de Montréal, je crée des bandes sonores originales pour jeux vidéo, films, publicités et documentaires.</p><p>Ma musique mélange orchestre symphonique, synthétiseurs modernes et textures électroniques pour donner vie aux émotions visuelles.</p>`,
-                'audio-title': 'Œuvres Audio'
-            },
-            en: {
-                'hero-status': 'Composer • Student in Visual Music',
-                'hero-title': 'Vincent<br>Desrochers',
-                'hero-tagline': 'Creating sound universes that tell stories',
-                'hero-cta': 'Listen to my work',
-                'nav-cta': 'Contact me',
-                'about-title': 'Passionate composer for visuals',
-                'about-text': `<p>Student in media composition at the University of Montreal, I create original soundtracks for video games, films, commercials and documentaries.</p><p>My music blends symphonic orchestra, modern synthesizers and electronic textures to bring visual emotions to life.</p>`,
-                'audio-title': 'Audio Works'
-            }
-        };
+        function toggleLanguage() {
+            currentLang = currentLang === 'fr' ? 'en' : 'fr';
+            document.querySelector('.lang-switch').textContent = currentLang === 'fr' ? 'EN' : 'FR';
+            
+            // Textes normaux
+            document.querySelectorAll('.i18n').forEach(el => {
+                el.textContent = el.getAttribute(`data-${currentLang}`);
+            });
+            // Placeholders des inputs
+            document.querySelectorAll('.i18n-placeholder').forEach(el => {
+                el.setAttribute('placeholder', el.getAttribute(`data-${currentLang}`));
+            });
+            // Mise à jour de la catégorie de la piste en cours
+            updateCurrentTrackCategoryLanguage();
+            // Re-rendre la playlist
+            renderPlaylist();
+        }
 
+        // --- ANIMATIONS AU SCROLL ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+        // --- CUSTOM AUDIO PLAYER ---
+        // Utilisation d'un fichier audio libre de droits de w3schools comme placeholder universel
+        const placeholderAudio = "https://www.w3schools.com/html/horse.mp3";
+        
         const tracks = [
-            {title: "Echoes of Aether", category: "Jeu Vidéo", duration: "2:45", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"},
-            {title: "Lumières d'Hiver", category: "Court-métrage", duration: "3:12", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"},
-            {title: "Neon Horizon", category: "Publicité", duration: "1:58", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"},
-            {title: "The Last Letter", category: "Documentaire", duration: "4:05", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3"}
+            { id: 0, title: "Epic Quest - Main Theme", catFr: "Jeu Vidéo", catEn: "Video Game", src: placeholderAudio, duration: "0:02" },
+            { id: 1, title: "Whispers in the Dark", catFr: "Cinéma", catEn: "Film Score", src: placeholderAudio, duration: "0:02" },
+            { id: 2, title: "Urban Flow", catFr: "Motion Design", catEn: "Motion Design", src: placeholderAudio, duration: "0:02" },
+            { id: 3, title: "Nature's Breath", catFr: "Documentaire", catEn: "Documentary", src: placeholderAudio, duration: "0:02" }
         ];
 
-        let currentAudio = null;
-        let isPlaying = false;
-
-        function createPlaylist() {
-            const container = document.getElementById('audio-playlist');
-            container.innerHTML = '';
-            tracks.forEach((track, i) => {
-                const div = document.createElement('div');
-                div.className = `audio-track flex items-center justify-between p-6 bg-white rounded-3xl cursor-pointer`;
-                div.innerHTML = `
-                    <div class="flex items-center gap-5">
-                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 text-white rounded-2xl flex items-center justify-center text-2xl">♪</div>
+        let currentTrackId = 0;
+        const audio = document.getElementById('audioElement');
+        const playIcon = document.getElementById('playIcon');
+        const progressBar = document.getElementById('progressBar');
+        
+        function renderPlaylist() {
+            const playlistContainer = document.getElementById('playlist');
+            playlistContainer.innerHTML = '';
+            
+            tracks.forEach(track => {
+                const isActive = track.id === currentTrackId ? 'active' : '';
+                const category = currentLang === 'fr' ? track.catFr : track.catEn;
+                
+                playlistContainer.innerHTML += `
+                    <div class="playlist-item ${isActive}" onclick="loadAndPlay(${track.id})">
                         <div>
-                            <div class="font-medium">${track.title}</div>
-                            <div class="text-sm text-slate-500">${track.category}</div>
+                            <strong>${track.title}</strong>
+                            <div style="font-size: 0.8rem; color: var(--text-light);">${category}</div>
                         </div>
+                        <div style="color: var(--text-light); font-size: 0.9rem;">${track.duration}</div>
                     </div>
-                    <div class="text-xs text-slate-400">${track.duration}</div>
                 `;
-                div.onclick = () => playTrack(i);
-                container.appendChild(div);
             });
         }
 
-        function playTrack(index) {
-            const track = tracks[index];
-            document.getElementById('player').classList.remove('hidden');
-            document.getElementById('now-playing').textContent = `${track.title} — ${track.category}`;
-            
-            if (currentAudio) currentAudio.pause();
-            currentAudio = new Audio(track.src);
-            currentAudio.play();
-            isPlaying = true;
-            document.getElementById('play-btn').innerHTML = `<i class="fas fa-pause"></i>`;
+        function loadTrack(id) {
+            currentTrackId = id;
+            const track = tracks[id];
+            audio.src = track.src;
+            document.getElementById('currentTitle').textContent = track.title;
+            updateCurrentTrackCategoryLanguage();
+            renderPlaylist();
+        }
+
+        function updateCurrentTrackCategoryLanguage() {
+            const track = tracks[currentTrackId];
+            document.getElementById('currentCat').textContent = currentLang === 'fr' ? track.catFr : track.catEn;
+        }
+
+        function loadAndPlay(id) {
+            loadTrack(id);
+            audio.play();
+            playIcon.className = "fa-solid fa-pause";
         }
 
         function togglePlay() {
-            if (!currentAudio) return;
-            isPlaying ? currentAudio.pause() : currentAudio.play();
-            document.getElementById('play-btn').innerHTML = isPlaying ? `<i class="fas fa-play"></i>` : `<i class="fas fa-pause"></i>`;
-            isPlaying = !isPlaying;
+            if (audio.paused) {
+                audio.play();
+                playIcon.className = "fa-solid fa-pause";
+            } else {
+                audio.pause();
+                playIcon.className = "fa-solid fa-play";
+            }
         }
 
-        function toggleLanguage() {
-            currentLang = currentLang === 'fr' ? 'en' : 'fr';
-            document.getElementById('current-lang').textContent = currentLang.toUpperCase();
-            // Mise à jour simple des textes
-            document.getElementById('hero-cta').textContent = currentLang === 'fr' ? 'Écouter mon travail' : 'Listen to my work';
+        function updateProgress() {
+            if (audio.duration) {
+                const percent = (audio.currentTime / audio.duration) * 100;
+                progressBar.style.width = percent + '%';
+            }
         }
 
-        function navigateTo(section) {
-            document.getElementById(section).scrollIntoView({ behavior: 'smooth' });
+        function seek(event) {
+            const container = document.getElementById('progressContainer');
+            const rect = container.getBoundingClientRect();
+            const clickX = event.clientX - rect.left;
+            const width = rect.width;
+            const percent = clickX / width;
+            audio.currentTime = percent * audio.duration;
         }
 
-        window.onload = function() {
-            createPlaylist();
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) entry.target.classList.add('visible');
-                });
-            }, { threshold: 0.1 });
-            
-            document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-        };
+        function nextTrack() {
+            let nextId = currentTrackId + 1;
+            if (nextId >= tracks.length) nextId = 0;
+            loadAndPlay(nextId);
+        }
+
+        // Initialisation
+        loadTrack(0);
+        renderPlaylist();
+
     </script>
 </body>
 </html>
