@@ -4,20 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VinceD | Composition de Musique à l'Image</title>
+    <!-- Polices élégantes et modernes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <!-- Icones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- VARIABLES & COULEURS (Inspirées des images) --- */
+        /* --- VARIABLES & COULEURS (Inspirées de votre image) --- */
         :root {
-            --bg-deep: #060d1a;
-            --blue-storm: #0f2547;
-            --blue-light: #2563eb;
-            --blue-cloud: #38bdf8;
+            --bg-deep: #030712; 
+            --blue-storm: #0b1d3a;
             --gold-glow: #f59e0b;
-            --gold-dim: #b45309;
             --text-light: #f8fafc;
             --text-muted: #94a3b8;
             --font-title: 'Cinzel', serif;
@@ -40,35 +39,30 @@
             line-height: 1.6;
         }
 
-        /* --- FOND ANIME PARALLAX (Nuages organiques légers) --- */
-        .ambient-clouds {
+        /* --- FOND PARALLAX AVEC VOTRE IMAGE --- */
+        #parallax-bg {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 120vh; /* Plus haut pour permettre un défilement fluide sans bordures blanches */
+            background-image: url('_1781876399e3fd334ae7ec348ca200b2620a3b03f922d5e931abdbe772887c67f0da0035d9.webp'); 
+            background-size: cover;
+            background-position: center top;
+            background-repeat: no-repeat;
+            z-index: -2; 
+            will-change: transform; /* Optimisation pour la carte graphique */
+        }
+
+        /* Voile sombre pour garantir le contraste et la lisibilité des textes */
+        #bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(3, 7, 18, 0.5), rgba(3, 7, 18, 0.75));
             z-index: -1;
-            pointer-events: none;
-            overflow: hidden;
-            background: linear-gradient(to bottom, #050b14, #0d1e36, #050b14);
-        }
-
-        .cloud-layer {
-            position: absolute;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, rgba(0,0,0,0) 70%);
-            filter: blur(80px);
-            animation: drift linear infinite;
-        }
-
-        .cloud1 { width: 600px; height: 600px; top: -10%; left: -10%; animation-duration: 40s; }
-        .cloud2 { width: 800px; height: 800px; bottom: -20%; right: -10%; background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, rgba(0,0,0,0) 70%); animation-duration: 60s; animation-direction: reverse; }
-        .cloud3 { width: 500px; height: 500px; top: 40%; left: 50%; rgba(15, 37, 71, 0.3) 0%, rgba(0,0,0,0) 70%; animation-duration: 50s; }
-
-        @keyframes drift {
-            0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(100px, 50px) scale(1.1); }
-            100% { transform: translate(0, 0) scale(1); }
         }
 
         /* --- NAVIGATION --- */
@@ -82,7 +76,7 @@
             align-items: center;
             z-index: 100;
             backdrop-filter: blur(12px);
-            background: rgba(6, 13, 26, 0.7);
+            background: rgba(3, 7, 18, 0.8);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
@@ -109,10 +103,10 @@
 
         nav a:hover, nav a.active {
             color: var(--text-light);
-            text-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+            text-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
         }
 
-        /* --- SECTIONS (TRAVERSÉE DE NUAGES EFFECT) --- */
+        /* --- SECTIONS (EFFET DE TRAVERSÉE) --- */
         section {
             padding: 8rem 10% 4rem 10%;
             min-height: 100vh;
@@ -120,7 +114,7 @@
             flex-direction: column;
             justify-content: center;
             opacity: 0;
-            transform: translateY(40px);
+            transform: translateY(30px);
             transition: opacity 1s ease, transform 1s ease;
         }
 
@@ -175,15 +169,15 @@
             width: 100%;
             max-width: 900px;
             aspect-ratio: 16/9;
-            background: rgba(15, 37, 71, 0.4);
+            background: rgba(0, 0, 0, 0.6);
             border: 1px solid rgba(255,255,255,0.1);
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
             margin-bottom: 2rem;
         }
 
-        .showreel-container iframe, .showreel-container video {
+        .showreel-container iframe {
             width: 100%;
             height: 100%;
             border: none;
@@ -208,7 +202,7 @@
         .btn:hover {
             background: var(--gold-glow);
             color: var(--bg-deep);
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
         }
 
         /* --- PORTFOLIO --- */
@@ -222,18 +216,15 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 2rem;
-            background: rgba(15, 37, 71, 0.2);
+            background: rgba(11, 29, 58, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.05);
             padding: 2rem;
             border-radius: 8px;
             backdrop-filter: blur(8px);
         }
 
-        .project-media, .project-audio {
+        .project-media {
             width: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
         }
 
         .video-box {
@@ -241,25 +232,31 @@
             background: #000;
             border-radius: 4px;
             overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .video-box iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
         }
 
         .audio-box {
             padding: 1rem;
-            background: rgba(6, 13, 26, 0.6);
+            background: rgba(3, 7, 18, 0.7);
             border-radius: 6px;
-            margin-top: 1rem;
-            border-left: 3px solid var(--blue-cloud);
+            border-left: 3px solid var(--gold-glow);
         }
 
         .audio-box h4 {
             font-size: 0.9rem;
             margin-bottom: 0.5rem;
-            color: var(--blue-cloud);
+            color: var(--gold-glow);
         }
 
         audio {
             width: 100%;
-            margin-top: 0.5rem;
+            height: 35px;
         }
 
         .project-info h3 {
@@ -288,7 +285,7 @@
 
         .skills-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 1.5rem;
         }
 
@@ -301,20 +298,19 @@
 
         .skill-category ul {
             list-style: none;
+            color: var(--text-muted);
+            font-size: 0.95rem;
         }
 
         .skill-category li {
-            color: var(--text-muted);
             margin-bottom: 0.4rem;
-            font-size: 0.95rem;
             display: flex;
             align-items: center;
         }
 
         .skill-category li::before {
             content: "•";
-            color: var(--blue-cloud);
-            font-weight: bold;
+            color: var(--gold-glow);
             display: inline-block; 
             width: 1em;
             margin-left: -1em;
@@ -342,18 +338,17 @@
             font-size: 0.85rem;
             text-transform: uppercase;
             margin-bottom: 0.5rem;
-            letter-spacing: 1px;
             color: var(--text-muted);
         }
 
         .form-group input, .form-group textarea {
-            background: rgba(15, 37, 71, 0.4);
+            background: rgba(11, 29, 58, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 1rem;
             color: #fff;
             border-radius: 4px;
             font-family: var(--font-body);
-            transition: all 0.3s ease;
+            transition: 0.3s;
         }
 
         .form-group input:focus, .form-group textarea:focus {
@@ -390,9 +385,10 @@
             font-size: 0.8rem;
             color: var(--text-muted);
             border-top: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(3, 7, 18, 0.9);
         }
 
-        /* --- RESPONSIVE DESIGN --- */
+        /* --- RESPONSIVE --- */
         @media (max-width: 968px) {
             .project-card, .about-layout, .contact-container {
                 grid-template-columns: 1fr;
@@ -400,18 +396,17 @@
             }
             .hero-title { font-size: 2.8rem; }
             header { padding: 1rem 5%; }
-            section { padding: 6rem 5% 3rem 5%; }
+            nav a { margin-left: 1rem; font-size: 0.8rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="ambient-clouds">
-        <div class="cloud-layer cloud1"></div>
-        <div class="cloud-layer cloud2"></div>
-        <div class="cloud-layer cloud3"></div>
-    </div>
+    <!-- ARRIÈRE-PLAN AVEC VOTRE COMPOSITION DE NUAGES -->
+    <div id="parallax-bg"></div>
+    <div id="bg-overlay"></div>
 
+    <!-- Barre de Navigation -->
     <header>
         <a href="#accueil" class="logo">Vince<span>D</span></a>
         <nav>
@@ -422,20 +417,24 @@
         </nav>
     </header>
 
+    <!-- SECTION 1 : ACCUEIL -->
     <section id="accueil" class="visible">
         <h1 class="hero-title">VINCENT DESROCHERS</h1>
         <p class="hero-subtitle">Compositeur de musique à l'image. Donner un souffle épique, narratif et immersif à vos récits visuels.</p>
         
+        <!-- Showreel Principal -->
         <div class="showreel-container">
             <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen loading="lazy"></iframe>
         </div>
         <a href="#portfolio" class="btn">Découvrir mes projets</a>
     </section>
 
+    <!-- SECTION 2 : PORTFOLIO / PROJETS -->
     <section id="portfolio">
         <h2>Projets Phares</h2>
         <div class="project-grid">
             
+            <!-- Projet 1 -->
             <div class="project-card">
                 <div class="project-media">
                     <div class="video-box">
@@ -445,7 +444,6 @@
                         <h4><i class="fa-solid fa-music"></i> Piste Audio Seule (Haute Qualité)</h4>
                         <audio controls preload="none">
                             <source src="votre-audio-1.mp3" type="audio/mpeg">
-                            Votre navigateur ne supporte pas l'élément audio.
                         </audio>
                     </div>
                 </div>
@@ -456,6 +454,7 @@
                 </div>
             </div>
 
+            <!-- Projet 2 -->
             <div class="project-card">
                 <div class="project-media">
                     <div class="video-box">
@@ -478,6 +477,7 @@
         </div>
     </section>
 
+    <!-- SECTION 3 & 4 : À PROPOS & COMPÉTENCES -->
     <section id="propos">
         <div class="about-layout">
             <div class="bio-text">
@@ -518,6 +518,7 @@
         </div>
     </section>
 
+    <!-- SECTION 5 : CONTACT -->
     <section id="contact">
         <h2>Collaborons Ensemble</h2>
         <div class="contact-container">
@@ -555,28 +556,23 @@
         <p>&copy; 2026 VinceD - Vincent Desrochers. Tous droits réservés.</p>
     </footer>
 
+    <!-- CODE SCRIPT (Parallaxe et Détection des sections) -->
     <script>
-        // --- 1. TRANSITION IMMERSIVE (Intersection Observer) ---
-        // Fait apparaître les sections en fondu/glissement lors du défilement
+        // --- 1. TRANSITIONS DE SECTIONS (Intersection Observer) ---
         const sections = document.querySelectorAll('section');
         const navLinks = document.querySelectorAll('.nav-link');
 
-        const observerOptions = {
-            root: null,
-            threshold: 0.2 // Déclenche lorsque 20% de la section est visible
-        };
+        const observerOptions = { root: null, threshold: 0.15 };
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
                     
-                    // Mise à jour de la navigation active
                     navLinks.forEach(link => {
+                        link.classList.remove('active');
                         if (link.getAttribute('href').substring(1) === entry.target.id) {
                             link.classList.add('active');
-                        } else {
-                            link.classList.remove('active');
                         }
                     });
                 }
@@ -585,17 +581,13 @@
 
         sections.forEach(section => observer.observe(section));
 
-        // --- 2. EFFET DE PARALLAX AU SCROLL SUR LES NUAGES ---
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const cloud1 = document.querySelector('.cloud1');
-            const cloud2 = document.querySelector('.cloud2');
-            const cloud3 = document.querySelector('.cloud3');
+        // --- 2. EFFECT PARALLAXE LENT SUR VOTRE IMAGE ---
+        const bgImage = document.getElementById('parallax-bg');
 
-            // Modifie la vitesse de déplacement vertical de chaque couche de faux nuages
-            cloud1.style.transform = `translateY(${scrolled * 0.15}px)`;
-            cloud2.style.transform = `translateY(${scrolled * -0.1}px)`;
-            cloud3.style.transform = `translateY(${scrolled * 0.05}px)`;
+        window.addEventListener('scroll', () => {
+            let offset = window.pageYOffset;
+            // Déplace l'image de nuages à 15% de la vitesse du scroll global pour un effet cinématique discret
+            bgImage.style.transform = `translateY(${offset * 0.15}px)`;
         });
     </script>
 </body>
