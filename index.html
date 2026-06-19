@@ -3,119 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VinceD | Composition de Musique à l'Image</title>
-    <!-- Polices élégantes et modernes -->
+    <title>VinceD | Compositeur de Musique à l'Image</title>
+    <!-- Google Fonts: Titres en Cinzel (Sérif élégant & cinématique), Corps en Inter (Sans-sérif ultra-lisible) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-    <!-- Icones -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- VARIABLES & COULEURS (Inspirées de votre image) --- */
+        /* --- VARIABLES ET THÈME --- */
         :root {
-            --bg-deep: #030712; 
-            --blue-storm: #0b1d3a;
-            --gold-glow: #f59e0b;
-            --text-light: #f8fafc;
-            --text-muted: #94a3b8;
+            --bg-dark: #060b14;
+            --card-bg: rgba(11, 22, 42, 0.65);
+            --accent-gold: #e5c158;
+            --accent-gold-glow: rgba(229, 193, 88, 0.4);
+            --text-light: #f4f6f9;
+            --text-dim: #a0aec0;
             --font-title: 'Cinzel', serif;
             --font-body: 'Inter', sans-serif;
+            --transition-smooth: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* --- SENSE OF IMMERSION & RESET --- */
+        /* --- RESET & BASES --- */
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+        }
+        
+        html {
             scroll-behavior: smooth;
         }
 
         body {
-            background-color: var(--bg-deep);
-            color: var(--text-light);
             font-family: var(--font-body);
+            background-color: var(--bg-dark);
+            color: var(--text-light);
             overflow-x: hidden;
             line-height: 1.6;
         }
 
-        /* --- FOND PARALLAX AVEC VOTRE IMAGE --- */
-        #parallax-bg {
+        /* --- ARRIÈRE-PLAN ANIMÉ EN PARALLAXE --- */
+        .parallax-bg {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 120vh; /* Plus haut pour permettre un défilement fluide sans bordures blanches */
-            background-image: url('_1781876399e3fd334ae7ec348ca200b2620a3b03f922d5e931abdbe772887c67f0da0035d9.webp'); 
+            width: 110%; /* Légèrement plus grand pour éviter les bords blancs pendant le mouvement */
+            height: 110%;
+            background-image: url('_1781876399e3fd334ae7ec348ca200b2620a3b03f922d5e931abdbe772887c67f0da0035d9.webp');
             background-size: cover;
-            background-position: center top;
-            background-repeat: no-repeat;
-            z-index: -2; 
-            will-change: transform; /* Optimisation pour la carte graphique */
+            background-position: center;
+            z-index: -2;
+            animation: cloudPan 80s linear infinite alternate;
+            will-change: transform;
         }
 
-        /* Voile sombre pour garantir le contraste et la lisibilité des textes */
-        #bg-overlay {
+        /* Voile sombre pour garantir la lisibilité du texte */
+        .ambient-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to bottom, rgba(3, 7, 18, 0.5), rgba(3, 7, 18, 0.75));
+            background: linear-gradient(180deg, rgba(6, 11, 20, 0.5) 0%, rgba(6, 11, 20, 0.85) 100%);
             z-index: -1;
+            pointer-events: none;
         }
 
-        /* --- NAVIGATION --- */
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 1.5rem 10%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-            backdrop-filter: blur(12px);
-            background: rgba(3, 7, 18, 0.8);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        @keyframes cloudPan {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(-3%, -2%) scale(1.05); }
+            100% { transform: translate(-5%, -4%) scale(1.02); }
         }
 
-        .logo {
-            font-family: var(--font-title);
-            font-size: 1.8rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            color: var(--text-light);
-            text-decoration: none;
-            transition: 0.3s;
-        }
-        .logo span { color: var(--gold-glow); }
-
-        nav a {
-            color: var(--text-muted);
-            text-decoration: none;
-            margin-left: 2rem;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-        }
-
-        nav a:hover, nav a.active {
-            color: var(--text-light);
-            text-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
-        }
-
-        /* --- SECTIONS (EFFET DE TRAVERSÉE) --- */
+        /* --- SÉCTIONS ET TRANSITIONS (Cloud Crossing Effect) --- */
         section {
-            padding: 8rem 10% 4rem 10%;
             min-height: 100vh;
+            padding: 100px 20px;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            align-items: center;
+            position: relative;
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 1s ease, transform 1s ease;
+            transform: translateY(40px);
+            transition: var(--transition-smooth);
         }
 
         section.visible {
@@ -123,472 +94,602 @@
             transform: translateY(0);
         }
 
-        h2 {
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- TYPOGRAPHIE RESPONSIVE --- */
+        h1, h2, h3 {
             font-family: var(--font-title);
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            position: relative;
             letter-spacing: 2px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            position: relative;
+            color: #ffffff;
         }
 
         h2::after {
             content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 0;
+            display: block;
             width: 60px;
             height: 2px;
-            background: var(--gold-glow);
-            box-shadow: 0 0 8px var(--gold-glow);
+            background-color: var(--accent-gold);
+            margin: 15px auto 0 auto;
+            box-shadow: 0 0 8px var(--accent-gold);
         }
 
-        /* --- ACCUEIL (HERO) --- */
+        p {
+            font-size: 1.05rem;
+            color: var(--text-dim);
+            font-weight: 300;
+        }
+
+        /* --- INTERACTIVITÉ & BOUTONS (Lueur dorée) --- */
+        .btn-gold {
+            display: inline-block;
+            padding: 12px 30px;
+            border: 1px solid var(--accent-gold);
+            background: transparent;
+            color: var(--text-light);
+            font-family: var(--font-title);
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            text-decoration: none;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-gold:hover {
+            color: #000;
+            background-color: var(--accent-gold);
+            box-shadow: 0 0 20px var(--accent-gold-glow);
+            transform: translateY(-2px);
+        }
+
+        /* --- NAVIGATION --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: rgba(6, 11, 20, 0.4);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-family: var(--font-title);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: var(--accent-gold);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-dim);
+            font-family: var(--font-title);
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            transition: var(--transition-smooth);
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--accent-gold);
+            text-shadow: 0 0 8px var(--accent-gold-glow);
+        }
+
+        /* --- SECTION 1 : ACCUEIL --- */
         #accueil {
             text-align: center;
-            align-items: center;
-            justify-content: center;
+            padding-top: 150px;
         }
 
-        .hero-title {
-            font-family: var(--font-title);
+        .hero-content h1 {
             font-size: 4rem;
-            line-height: 1.1;
-            margin-bottom: 1rem;
-            letter-spacing: 4px;
+            margin-bottom: 10px;
+            animation: fadeInDown 1.5s ease;
         }
 
-        .hero-subtitle {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            margin-bottom: 3rem;
-            max-width: 600px;
-            font-weight: 300;
+        .hero-content .subtitle {
+            font-size: 1.4rem;
+            font-family: var(--font-title);
+            color: var(--text-dim);
+            margin-bottom: 40px;
+            letter-spacing: 4px;
         }
 
         .showreel-container {
             width: 100%;
-            max-width: 900px;
+            max-width: 800px;
             aspect-ratio: 16/9;
-            background: rgba(0, 0, 0, 0.6);
+            margin: 0 auto 40px auto;
+            background: rgba(0,0,0,0.5);
             border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border-radius: 4px;
             overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
-            margin-bottom: 2rem;
         }
 
-        .showreel-container iframe {
+        .showreel-container iframe, .showreel-container video {
             width: 100%;
             height: 100%;
             border: none;
         }
 
-        /* --- BOUTONS --- */
-        .btn {
-            display: inline-block;
-            padding: 0.8rem 2rem;
-            border: 1px solid var(--gold-glow);
-            color: var(--gold-glow);
-            text-decoration: none;
-            text-transform: uppercase;
-            font-size: 0.85rem;
-            letter-spacing: 2px;
-            border-radius: 4px;
-            transition: all 0.4s ease;
-            background: transparent;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            background: var(--gold-glow);
-            color: var(--bg-deep);
-            box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
-        }
-
-        /* --- PORTFOLIO --- */
-        .project-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 4rem;
-        }
-
+        /* --- SECTION 2 : PORTFOLIO / PROJETS --- */
         .project-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+
+        .project-title {
+            font-family: var(--font-title);
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            color: var(--accent-gold);
+            text-align: left;
+        }
+
+        /* Présentation vidéo et audio à parts égales */
+        .project-media-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            background: rgba(11, 29, 58, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 2rem;
-            border-radius: 8px;
-            backdrop-filter: blur(8px);
+            gap: 30px;
+            align-items: center;
         }
 
-        .project-media {
+        .media-box {
             width: 100%;
         }
 
-        .video-box {
+        .media-box h4 {
+            font-family: var(--font-title);
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .video-wrapper {
             aspect-ratio: 16/9;
             background: #000;
             border-radius: 4px;
             overflow: hidden;
-            margin-bottom: 1rem;
         }
 
-        .video-box iframe {
+        .video-wrapper video, .video-wrapper iframe {
             width: 100%;
             height: 100%;
             border: none;
         }
 
-        .audio-box {
-            padding: 1rem;
-            background: rgba(3, 7, 18, 0.7);
-            border-radius: 6px;
-            border-left: 3px solid var(--gold-glow);
-        }
-
-        .audio-box h4 {
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-            color: var(--gold-glow);
+        .audio-wrapper {
+            background: rgba(6, 11, 20, 0.6);
+            padding: 30px 20px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            min-height: 150px;
         }
 
         audio {
             width: 100%;
-            height: 35px;
+            margin-top: 10px;
         }
 
-        .project-info h3 {
-            font-family: var(--font-title);
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
+        /* --- SECTION 3 : À PROPOS --- */
+        .bio-content {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 40px;
+            border-radius: 8px;
+            max-width: 900px;
+            margin: 0 auto;
         }
 
-        .project-info p {
-            color: var(--text-muted);
-            margin-bottom: 1.5rem;
+        .bio-content p {
+            margin-bottom: 20px;
+            text-align: justify;
         }
 
-        /* --- ABOUT & SKILLS --- */
-        .about-layout {
-            display: grid;
-            grid-template-columns: 3fr 2fr;
-            gap: 4rem;
-        }
-
-        .bio-text p {
-            margin-bottom: 1.5rem;
-            color: var(--text-muted);
-            font-size: 1.05rem;
-        }
-
+        /* --- SECTION 4 : COMPÉTENCES --- */
         .skills-grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
         }
 
-        .skill-category h4 {
-            font-family: var(--font-title);
-            color: var(--gold-glow);
-            margin-bottom: 0.8rem;
-            font-size: 1.1rem;
+        .skills-category {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            transition: var(--transition-smooth);
         }
 
-        .skill-category ul {
+        .skills-category:hover {
+            border-color: var(--accent-gold);
+            transform: translateY(-5px);
+        }
+
+        .skills-category h3 {
+            color: var(--accent-gold);
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .skills-category ul {
             list-style: none;
-            color: var(--text-muted);
-            font-size: 0.95rem;
         }
 
-        .skill-category li {
-            margin-bottom: 0.4rem;
-            display: flex;
-            align-items: center;
+        .skills-category li {
+            color: var(--text-light);
+            margin-bottom: 10px;
+            font-size: 1rem;
+            font-weight: 300;
         }
 
-        .skill-category li::before {
-            content: "•";
-            color: var(--gold-glow);
-            display: inline-block; 
-            width: 1em;
-            margin-left: -1em;
-        }
-
-        /* --- CONTACT --- */
-        .contact-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-        }
-
-        .contact-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
+        /* --- SECTION 5 : CONTACT --- */
+        .contact-wrapper {
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 40px;
+            border-radius: 8px;
         }
 
         .form-group {
-            display: flex;
-            flex-direction: column;
+            margin-bottom: 20px;
         }
 
         .form-group label {
+            display: block;
+            font-family: var(--font-title);
             font-size: 0.85rem;
-            text-transform: uppercase;
-            margin-bottom: 0.5rem;
-            color: var(--text-muted);
+            margin-bottom: 8px;
+            color: var(--text-dim);
         }
 
         .form-group input, .form-group textarea {
-            background: rgba(11, 29, 58, 0.4);
+            width: 100%;
+            padding: 12px;
+            background: rgba(6, 11, 20, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 1rem;
             color: #fff;
-            border-radius: 4px;
             font-family: var(--font-body);
-            transition: 0.3s;
+            font-size: 1rem;
+            border-radius: 4px;
+            transition: var(--transition-smooth);
         }
 
         .form-group input:focus, .form-group textarea:focus {
             outline: none;
-            border-color: var(--gold-glow);
-            box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 10px rgba(229, 193, 88, 0.2);
         }
 
-        .contact-info h3 {
-            font-family: var(--font-title);
-            margin-bottom: 1rem;
-        }
-
-        .social-links {
-            margin-top: 2rem;
+        .contact-links {
+            margin-top: 30px;
+            text-align: center;
             display: flex;
-            gap: 1.5rem;
+            justify-content: center;
+            gap: 20px;
         }
 
-        .social-links a {
-            color: var(--text-light);
-            font-size: 1.5rem;
-            transition: 0.3s;
+        .contact-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition-smooth);
         }
 
-        .social-links a:hover {
-            color: var(--gold-glow);
-            transform: translateY(-3px);
+        .contact-links a:hover {
+            color: var(--accent-gold);
         }
 
+        /* --- FOOTER --- */
         footer {
             text-align: center;
-            padding: 2rem;
-            font-size: 0.8rem;
-            color: var(--text-muted);
+            padding: 40px;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.3);
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-            background: rgba(3, 7, 18, 0.9);
+            background: #060b14;
         }
 
-        /* --- RESPONSIVE --- */
-        @media (max-width: 968px) {
-            .project-card, .about-layout, .contact-container {
+        /* --- ANIMATIONS & RESPONSIVE --- */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 900px) {
+            .project-media-grid {
                 grid-template-columns: 1fr;
-                gap: 2rem;
             }
-            .hero-title { font-size: 2.8rem; }
-            header { padding: 1rem 5%; }
-            nav a { margin-left: 1rem; font-size: 0.8rem; }
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+            header {
+                padding: 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+            .hero-content h1 {
+                font-size: 2.8rem;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- ARRIÈRE-PLAN AVEC VOTRE COMPOSITION DE NUAGES -->
-    <div id="parallax-bg"></div>
-    <div id="bg-overlay"></div>
+    <!-- Fond en parallaxe continu -->
+    <div class="parallax-bg"></div>
+    <div class="ambient-overlay"></div>
 
-    <!-- Barre de Navigation -->
+    <!-- Menu de Navigation -->
     <header>
         <a href="#accueil" class="logo">Vince<span>D</span></a>
         <nav>
-            <a href="#accueil" class="nav-link active">Accueil</a>
-            <a href="#portfolio" class="nav-link">Portfolio</a>
-            <a href="#propos" class="nav-link">À Propos</a>
-            <a href="#contact" class="nav-link">Contact</a>
+            <ul>
+                <li><a href="#accueil" class="nav-link active">Accueil</a></li>
+                <li><a href="#portfolio" class="nav-link">Portfolio</a></li>
+                <li><a href="#propos" class="nav-link">À Propos</a></li>
+                <li><a href="#competences" class="nav-link">Compétences</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
         </nav>
     </header>
 
-    <!-- SECTION 1 : ACCUEIL -->
-    <section id="accueil" class="visible">
-        <h1 class="hero-title">VINCENT DESROCHERS</h1>
-        <p class="hero-subtitle">Compositeur de musique à l'image. Donner un souffle épique, narratif et immersif à vos récits visuels.</p>
-        
-        <!-- Showreel Principal -->
-        <div class="showreel-container">
-            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen loading="lazy"></iframe>
-        </div>
-        <a href="#portfolio" class="btn">Découvrir mes projets</a>
-    </section>
-
-    <!-- SECTION 2 : PORTFOLIO / PROJETS -->
-    <section id="portfolio">
-        <h2>Projets Phares</h2>
-        <div class="project-grid">
-            
-            <!-- Projet 1 -->
-            <div class="project-card">
-                <div class="project-media">
-                    <div class="video-box">
-                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen loading="lazy"></iframe>
-                    </div>
-                    <div class="audio-box">
-                        <h4><i class="fa-solid fa-music"></i> Piste Audio Seule (Haute Qualité)</h4>
-                        <audio controls preload="none">
-                            <source src="votre-audio-1.mp3" type="audio/mpeg">
-                        </audio>
-                    </div>
+    <main>
+        <!-- 1. ACCUEIL & SHOWREEL -->
+        <section id="accueil" class="visible">
+            <div class="container hero-content">
+                <h1>VinceD</h1>
+                <p class="subtitle">Musique à l'Image & Design Sonore</p>
+                
+                <div class="showreel-container">
+                    <!-- Remplacer le src par l'iframe Vimeo/YouTube réel ou une balise <video> locale -->
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="VinceD - Showreel 2026" allowfullscreen loading="lazy"></iframe>
                 </div>
-                <div class="project-info">
-                    <h3>Le Souffle des Abysses</h3>
-                    <p><strong>Type :</strong> Court-métrage de Science-Fiction / Drame</p>
-                    <p>Composition d'une partition hybride mêlant orchestre symphonique lourd, textures électroniques sombres et Sound Design organique. L'objectif était de retransmettre l'immensité étouffante des fonds marins.</p>
-                </div>
+                
+                <a href="#portfolio" class="btn-gold">Explorer les projets</a>
             </div>
+        </section>
 
-            <!-- Projet 2 -->
-            <div class="project-card">
-                <div class="project-media">
-                    <div class="video-box">
-                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen loading="lazy"></iframe>
-                    </div>
-                    <div class="audio-box">
-                        <h4><i class="fa-solid fa-music"></i> Piste Audio Seule (Haute Qualité)</h4>
-                        <audio controls preload="none">
-                            <source src="votre-audio-2.mp3" type="audio/mpeg">
-                        </audio>
+        <!-- 2. PORTFOLIO / PROJETS -->
+        <section id="portfolio">
+            <div class="container">
+                <h2>Projets Phares</h2>
+                
+                <!-- Projet 1 -->
+                <div class="project-card">
+                    <h3 class="project-title">01. Échos du Crépuscule (Court-métrage de SF)</h3>
+                    <div class="project-media-grid">
+                        <!-- Vidéo synchro -->
+                        <div class="media-box">
+                            <h4>Extrait Synchronisé</h4>
+                            <div class="video-wrapper">
+                                <video controls preload="none" poster="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                                    <source src="lien-vers-video-projet1.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                        </div>
+                        <!-- Piste audio seule -->
+                        <div class="media-box">
+                            <h4>Bande Originale (Audio Seul)</h4>
+                            <div class="audio-wrapper">
+                                <p>Thème principal orchestral et synthétique.</p>
+                                <audio controls preload="none">
+                                    <source src="lien-vers-audio-projet1.mp3" type="audio/mpeg">
+                                    Votre navigateur ne supporte pas l'élément audio.
+                                </audio>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="project-info">
-                    <h3>Échos de l'Horizon</h3>
-                    <p><strong>Type :</strong> Publicité / Identité de marque cinématographique</p>
-                    <p>Création d'un thème épuré au piano solo, soutenu progressivement par un crescendo de cordes et de percussions légères. Un travail axé sur l'émotion brute et la pureté mélodique.</p>
+
+                <!-- Projet 2 -->
+                <div class="project-card">
+                    <h3 class="project-title">02. Au-delà des Nuages (Documentaire Animalier)</h3>
+                    <div class="project-media-grid">
+                        <div class="media-box">
+                            <h4>Extrait Synchronisé</h4>
+                            <div class="video-wrapper">
+                                <video controls preload="none" poster="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
+                                    <source src="lien-vers-video-projet2.mp4" type="video/mp4">
+                                </video>
+                            </div>
+                        </div>
+                        <div class="media-box">
+                            <h4>Bande Originale (Audio Seul)</h4>
+                            <div class="audio-wrapper">
+                                <p>Compositions épurées (Piano, violoncelle et textures organiques).</p>
+                                <audio controls preload="none">
+                                    <source src="lien-vers-audio-projet2.mp3" type="audio/mpeg">
+                                </audio>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
+        </section>
 
-        </div>
-    </section>
-
-    <!-- SECTION 3 & 4 : À PROPOS & COMPÉTENCES -->
-    <section id="propos">
-        <div class="about-layout">
-            <div class="bio-text">
+        <!-- 3. BIO / À PROPOS -->
+        <section id="propos">
+            <div class="container">
                 <h2>À Propos</h2>
-                <p>Actuellement étudiant en composition de musique à l’image, je traduis les émotions visuelles en architectures sonores. Fasciné par la puissance narrative de la musique au cinéma, j'explore l'interaction entre les instruments acoustiques traditionnels et la modernité des synthétiseurs.</p>
-                <p>Mon processus créatif est guidé par une étroite collaboration avec les réalisateurs pour concevoir une identité sonore sur-mesure, servant l'histoire avant tout.</p>
+                <div class="bio-content">
+                    <p>Derrière l'alias <strong>VinceD</strong> se cache Vincent Desrochers, compositeur passionné par la narration visuelle. Actuellement étudiant avancé en composition de musique à l’image, il façonne des univers sonores sur-mesure pour sublimer l'intention des réalisateurs et donner une âme aux projets visuels.</p>
+                    <p>Puisant son inspiration autant dans les orchestrations classiques massives que dans les textures électroniques expérimentales et ambiantes (à l'image des ciels tourmentés et profonds), Vincent aborde chaque projet comme une toile blanche où le son devient le prolongement de l'émotion à l'écran.</p>
+                </div>
             </div>
-            
-            <div class="bio-skills">
+        </section>
+
+        <!-- 4. COMPÉTENCES -->
+        <section id="competences">
+            <div class="container">
                 <h2>Compétences</h2>
                 <div class="skills-grid">
-                    <div class="skill-category">
-                        <h4>Logiciels (DAW)</h4>
+                    <!-- Logiciels -->
+                    <div class="skills-category">
+                        <h3>Logiciels & DAW</h3>
                         <ul>
-                            <li>Cubase Pro</li>
-                            <li>Logic Pro X</li>
-                            <li>Pro Tools</li>
+                            <li>Cubase Pro / Logic Pro X</li>
+                            <li>Pro Tools (Post-production)</li>
+                            <li>Kontakt / Vienna Ensemble Pro</li>
+                            <li>Wwise (Intégration Jeu Vidéo)</li>
                         </ul>
                     </div>
-                    <div class="skill-category">
-                        <h4>Instruments</h4>
+                    <!-- Instruments -->
+                    <div class="skills-category">
+                        <h3>Instruments</h3>
                         <ul>
-                            <li>Piano (Classique/Jazz)</li>
-                            <li>Synthétiseurs Analogiques</li>
-                            <li>Percussions</li>
+                            <li>Piano (Cursus classique)</li>
+                            <li>Synthétiseurs analogiques & modulaires</li>
+                            <li>Guitare ambiante / Textures</li>
+                            <li>Écritures et arrangements cordes</li>
                         </ul>
                     </div>
-                    <div class="skill-category">
-                        <h4>Styles Maîtrisés</h4>
+                    <!-- Styles -->
+                    <div class="skills-category">
+                        <h3>Styles Maîtrisés</h3>
                         <ul>
-                            <li>Orchestral / Épique</li>
-                            <li>Ambient / Textural</li>
-                            <li>Hybride / Électronique</li>
+                            <li>Orchestral / Cinématique Épique</li>
+                            <li>Ambient / Électronique Minimaliste</li>
+                            <li>Dark Ambient / Hybride (Horreur, Thriller)</li>
+                            <li>Musique acoustique intimiste</li>
                         </ul>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- SECTION 5 : CONTACT -->
-    <section id="contact">
-        <h2>Collaborons Ensemble</h2>
-        <div class="contact-container">
-            <div class="contact-info">
-                <h3>Un projet, un film, une idée ?</h3>
-                <p>Que vous soyez réalisateur, studio de jeu vidéo ou producteur, n'hésitez pas à me contacter pour discuter de votre univers sonore.</p>
-                
-                <div class="social-links">
-                    <a href="#" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
-                    <a href="#" target="_blank" title="SoundCloud"><i class="fa-brands fa-soundcloud"></i></a>
-                    <a href="#" target="_blank" title="Vimeo"><i class="fa-brands fa-vimeo"></i></a>
-                    <a href="mailto:contact@vincentdesrochers.com" title="Email"><i class="fa-solid fa-envelope"></i></a>
+        <!-- 5. CONTACT -->
+        <section id="contact">
+            <div class="container">
+                <h2>Travaillons Ensemble</h2>
+                <div class="contact-wrapper">
+                    <form action="#" method="POST" onsubmit="event.preventDefault(); alert('Message envoyé avec succès ! (Simulation)');">
+                        <div class="form-group">
+                            <label for="name">Nom / Studio</label>
+                            <input type="text" id="name" required placeholder="Votre nom ou structure">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Adresse Email</label>
+                            <input type="email" id="email" required placeholder="votre@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Votre Projet</label>
+                            <textarea id="message" rows="5" required placeholder="Décrivez votre projet court-métrage, jeu, publicité..."></textarea>
+                        </div>
+                        <div style="text-align: center;">
+                            <button type="submit" class="btn-gold">Envoyer la proposition</button>
+                        </div>
+                    </form>
+                    
+                    <div class="contact-links">
+                        <a href="mailto:vincent.desrochers@example.com">vincent.desrochers@example.com</a>
+                        <span>|</span>
+                        <a href="#" target="_blank">LinkedIn</a>
+                        <span>|</span>
+                        <a href="#" target="_blank">SoundCloud</a>
+                    </div>
                 </div>
             </div>
-
-            <form class="contact-form" action="#" method="POST">
-                <div class="form-group">
-                    <label for="name">Nom / Studio</label>
-                    <input type="text" id="name" required placeholder="Votre nom">
-                </div>
-                <div class="form-group">
-                    <label for="email">Adresse Email</label>
-                    <input type="email" id="email" required placeholder="votre@email.com">
-                </div>
-                <div class="form-group">
-                    <label for="message">Votre Message</label>
-                    <textarea id="message" rows="5" required placeholder="Parlez-moi de votre projet..."></textarea>
-                </div>
-                <button type="submit" class="btn">Envoyer</button>
-            </form>
-        </div>
-    </section>
+        </section>
+    </main>
 
     <footer>
-        <p>&copy; 2026 VinceD - Vincent Desrochers. Tous droits réservés.</p>
+        <p>&copy; 2026 VinceD - Vincent Desrochers. Tous droits réservés. Musique à l'image.</p>
     </footer>
 
-    <!-- CODE SCRIPT (Parallaxe et Détection des sections) -->
+    <!-- --- LOGIQUE ANIMATION ET COMPRESSION DES FLUX --- -->
     <script>
-        // --- 1. TRANSITIONS DE SECTIONS (Intersection Observer) ---
+        // 1. Intersection Observer pour apparition fluide ("Traversée de nuages")
         const sections = document.querySelectorAll('section');
         const navLinks = document.querySelectorAll('.nav-link');
 
-        const observerOptions = { root: null, threshold: 0.15 };
+        const observerOptions = {
+            root: null,
+            threshold: 0.2, // La section s'active quand 20% est visible
+            rootMargin: "0px"
+        };
 
-        const observer = new IntersectionObserver((entries) => {
+        const sectionObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
                     
+                    // Mise à jour de la navigation active
+                    const id = entry.target.getAttribute('id');
                     navLinks.forEach(link => {
-                        link.classList.remove('active');
-                        if (link.getAttribute('href').substring(1) === entry.target.id) {
+                        if (link.getAttribute('href') === `#${id}`) {
                             link.classList.add('active');
+                        } else {
+                            link.classList.remove('active');
                         }
                     });
                 }
             });
         }, observerOptions);
 
-        sections.forEach(section => observer.observe(section));
-
-        // --- 2. EFFECT PARALLAXE LENT SUR VOTRE IMAGE ---
-        const bgImage = document.getElementById('parallax-bg');
-
-        window.addEventListener('scroll', () => {
-            let offset = window.pageYOffset;
-            // Déplace l'image de nuages à 15% de la vitesse du scroll global pour un effet cinématique discret
-            bgImage.style.transform = `translateY(${offset * 0.15}px)`;
+        sections.forEach(section => {
+            sectionObserver.observe(section);
         });
+
+        // 2. Parallaxe réactif au scroll (légère accentuation en JS en complément du CSS)
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const bg = document.querySelector('.parallax-bg');
+            // Décale doucement le fond en fonction du scroll pour accentuer la profondeur
+            bg.style.transform = `translateY(${scrolled * 0.05}px)`;
+        });
+
+        // 3. Optimisation Performance : Lazy Loading des Médias (Audio / Vidéo)
+        // Les attributs preload="none" sur les balises empêchent le téléchargement avant clic.
     </script>
 </body>
 </html>
