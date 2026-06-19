@@ -1,166 +1,602 @@
-/* ============================================================
-   CLOUD CANVAS — animated storm background with parallax layers
-   ============================================================ */
-(function () {
-  const canvas = document.getElementById('sky');
-  const ctx = canvas.getContext('2d');
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VinceD | Composition de Musique à l'Image</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- VARIABLES & COULEURS (Inspirées des images) --- */
+        :root {
+            --bg-deep: #060d1a;
+            --blue-storm: #0f2547;
+            --blue-light: #2563eb;
+            --blue-cloud: #38bdf8;
+            --gold-glow: #f59e0b;
+            --gold-dim: #b45309;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --font-title: 'Cinzel', serif;
+            --font-body: 'Inter', sans-serif;
+        }
 
-  let W, H, DPR;
-  function resize() {
-    DPR = Math.min(window.devicePixelRatio || 1, 2);
-    W = window.innerWidth;
-    H = window.innerHeight;
-    canvas.width = W * DPR;
-    canvas.height = H * DPR;
-    canvas.style.width = W + 'px';
-    canvas.style.height = H + 'px';
-    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  }
-  window.addEventListener('resize', resize);
-  resize();
+        /* --- SENSE OF IMMERSION & RESET --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
 
-  // Cloud "blobs" — soft radial gradients drifting at different speeds (parallax layers)
-  function makeBlob(layer) {
-    const speedBase = layer === 0 ? 0.06 : layer === 1 ? 0.12 : 0.2;
-    const hueSets = [
-      ['rgba(14, 33, 82, 0.55)', 'rgba(14, 33, 82, 0)'],
-      ['rgba(29, 77, 143, 0.5)', 'rgba(29, 77, 143, 0)'],
-      ['rgba(79, 143, 209, 0.35)', 'rgba(79, 143, 209, 0)'],
-      ['rgba(232, 160, 79, 0.12)', 'rgba(232, 160, 79, 0)']
-    ];
-    const colors = hueSets[Math.floor(Math.random() * hueSets.length)];
-    return {
-      layer,
-      x: Math.random() * W,
-      y: Math.random() * H,
-      r: (200 + Math.random() * 320) * (1 + layer * 0.4),
-      vx: (Math.random() - 0.5) * speedBase,
-      vy: (Math.random() - 0.5) * speedBase * 0.4,
-      colors
-    };
-  }
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-light);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
 
-  let blobs = [];
-  function initBlobs() {
-    blobs = [];
-    const counts = [4, 5, 4]; // back, mid, front layers
-    counts.forEach((count, layer) => {
-      for (let i = 0; i < count; i++) blobs.push(makeBlob(layer));
-    });
-  }
-  initBlobs();
+        /* --- FOND ANIME PARALLAX (Nuages organiques légers) --- */
+        .ambient-clouds {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #050b14, #0d1e36, #050b14);
+        }
 
-  // Scroll-driven drift offset — adds extra motion when changing sections
-  let scrollDrift = 0;
-  let targetDrift = 0;
+        .cloud-layer {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, rgba(0,0,0,0) 70%);
+            filter: blur(80px);
+            animation: drift linear infinite;
+        }
 
-  function draw() {
-    ctx.clearRect(0, 0, W, H);
+        .cloud1 { width: 600px; height: 600px; top: -10%; left: -10%; animation-duration: 40s; }
+        .cloud2 { width: 800px; height: 800px; bottom: -20%; right: -10%; background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, rgba(0,0,0,0) 70%); animation-duration: 60s; animation-direction: reverse; }
+        .cloud3 { width: 500px; height: 500px; top: 40%; left: 50%; rgba(15, 37, 71, 0.3) 0%, rgba(0,0,0,0) 70%; animation-duration: 50s; }
 
-    // base sky gradient
-    const base = ctx.createRadialGradient(W * 0.5, H * 0.15, 0, W * 0.5, H * 0.5, Math.max(W, H) * 0.9);
-    base.addColorStop(0, '#10295c');
-    base.addColorStop(0.45, '#081636');
-    base.addColorStop(1, '#050b1a');
-    ctx.fillStyle = base;
-    ctx.fillRect(0, 0, W, H);
+        @keyframes drift {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(100px, 50px) scale(1.1); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
 
-    blobs.forEach((b) => {
-      if (!reduceMotion) {
-        b.x += b.vx + scrollDrift * (0.15 + b.layer * 0.1);
-        b.y += b.vy;
+        /* --- NAVIGATION --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            background: rgba(6, 13, 26, 0.7);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-        if (b.x < -b.r) b.x = W + b.r;
-        if (b.x > W + b.r) b.x = -b.r;
-        if (b.y < -b.r) b.y = H + b.r;
-        if (b.y > H + b.r) b.y = -b.r;
-      }
+        .logo {
+            font-family: var(--font-title);
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .logo span { color: var(--gold-glow); }
 
-      const g = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
-      g.addColorStop(0, b.colors[0]);
-      g.addColorStop(1, b.colors[1]);
-      ctx.fillStyle = g;
-      ctx.beginPath();
-      ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
-      ctx.fill();
-    });
+        nav a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 2rem;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
 
-    // ease drift back to baseline
-    scrollDrift += (targetDrift - scrollDrift) * 0.08;
+        nav a:hover, nav a.active {
+            color: var(--text-light);
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+        }
 
-    requestAnimationFrame(draw);
-  }
-  draw();
+        /* --- SECTIONS (TRAVERSÉE DE NUAGES EFFECT) --- */
+        section {
+            padding: 8rem 10% 4rem 10%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
 
-  // Trigger extra drift burst on section change (wheel/scroll)
-  let lastScrollY = window.scrollY;
-  let driftTimeout;
-  window.addEventListener('scroll', () => {
-    const delta = window.scrollY - lastScrollY;
-    lastScrollY = window.scrollY;
-    targetDrift = Math.max(-2.5, Math.min(2.5, delta * 0.08));
-    clearTimeout(driftTimeout);
-    driftTimeout = setTimeout(() => { targetDrift = 0; }, 400);
-  }, { passive: true });
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-})();
+        h2 {
+            font-family: var(--font-title);
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            position: relative;
+            letter-spacing: 2px;
+        }
 
-/* ============================================================
-   NAV — background on scroll
-   ============================================================ */
-const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 40) nav.classList.add('scrolled');
-  else nav.classList.remove('scrolled');
-}, { passive: true });
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: var(--gold-glow);
+            box-shadow: 0 0 8px var(--gold-glow);
+        }
 
-/* ============================================================
-   SCROLL REVEAL — projects fade/rise into view
-   ============================================================ */
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('in-view');
-    }
-  });
-}, { threshold: 0.2 });
+        /* --- ACCUEIL (HERO) --- */
+        #accueil {
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+        }
 
-document.querySelectorAll('.project').forEach((el) => observer.observe(el));
+        .hero-title {
+            font-family: var(--font-title);
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            letter-spacing: 4px;
+        }
 
-/* ============================================================
-   PLAY BUTTONS — placeholder interaction
-   (Replace with real audio src when tracks are ready)
-   ============================================================ */
-document.querySelectorAll('.play-btn').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    const isPlaying = btn.classList.contains('playing');
-    document.querySelectorAll('.play-btn.playing').forEach((b) => {
-      b.classList.remove('playing');
-      b.textContent = '▶ Écouter la piste';
-    });
-    if (!isPlaying) {
-      btn.classList.add('playing');
-      btn.textContent = '⏸ En cours d\'écoute';
-    }
-  });
-});
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            font-weight: 300;
+        }
 
-/* ============================================================
-   CONTACT FORM — placeholder submit handling
-   ============================================================ */
-const form = document.getElementById('contact-form');
-if (form) {
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const btn = form.querySelector('.submit-btn');
-    const original = btn.textContent;
-    btn.textContent = 'Message envoyé ✓';
-    btn.disabled = true;
-    setTimeout(() => {
-      btn.textContent = original;
-      btn.disabled = false;
-      form.reset();
-    }, 2600);
-  });
-}
+        .showreel-container {
+            width: 100%;
+            max-width: 900px;
+            aspect-ratio: 16/9;
+            background: rgba(15, 37, 71, 0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            margin-bottom: 2rem;
+        }
+
+        .showreel-container iframe, .showreel-container video {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* --- BOUTONS --- */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            border: 1px solid var(--gold-glow);
+            color: var(--gold-glow);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            border-radius: 4px;
+            transition: all 0.4s ease;
+            background: transparent;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: var(--gold-glow);
+            color: var(--bg-deep);
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+        }
+
+        /* --- PORTFOLIO --- */
+        .project-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+        }
+
+        .project-card {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            background: rgba(15, 37, 71, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 8px;
+            backdrop-filter: blur(8px);
+        }
+
+        .project-media, .project-audio {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .video-box {
+            aspect-ratio: 16/9;
+            background: #000;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .audio-box {
+            padding: 1rem;
+            background: rgba(6, 13, 26, 0.6);
+            border-radius: 6px;
+            margin-top: 1rem;
+            border-left: 3px solid var(--blue-cloud);
+        }
+
+        .audio-box h4 {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            color: var(--blue-cloud);
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 0.5rem;
+        }
+
+        .project-info h3 {
+            font-family: var(--font-title);
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .project-info p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        /* --- ABOUT & SKILLS --- */
+        .about-layout {
+            display: grid;
+            grid-template-columns: 3fr 2fr;
+            gap: 4rem;
+        }
+
+        .bio-text p {
+            margin-bottom: 1.5rem;
+            color: var(--text-muted);
+            font-size: 1.05rem;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .skill-category h4 {
+            font-family: var(--font-title);
+            color: var(--gold-glow);
+            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+        }
+
+        .skill-category ul {
+            list-style: none;
+        }
+
+        .skill-category li {
+            color: var(--text-muted);
+            margin-bottom: 0.4rem;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .skill-category li::before {
+            content: "•";
+            color: var(--blue-cloud);
+            font-weight: bold;
+            display: inline-block; 
+            width: 1em;
+            margin-left: -1em;
+        }
+
+        /* --- CONTACT --- */
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+        }
+
+        .form-group input, .form-group textarea {
+            background: rgba(15, 37, 71, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            color: #fff;
+            border-radius: 4px;
+            font-family: var(--font-body);
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--gold-glow);
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+        }
+
+        .contact-info h3 {
+            font-family: var(--font-title);
+            margin-bottom: 1rem;
+        }
+
+        .social-links {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .social-links a {
+            color: var(--text-light);
+            font-size: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .social-links a:hover {
+            color: var(--gold-glow);
+            transform: translateY(-3px);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 968px) {
+            .project-card, .about-layout, .contact-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .hero-title { font-size: 2.8rem; }
+            header { padding: 1rem 5%; }
+            section { padding: 6rem 5% 3rem 5%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-clouds">
+        <div class="cloud-layer cloud1"></div>
+        <div class="cloud-layer cloud2"></div>
+        <div class="cloud-layer cloud3"></div>
+    </div>
+
+    <header>
+        <a href="#accueil" class="logo">Vince<span>D</span></a>
+        <nav>
+            <a href="#accueil" class="nav-link active">Accueil</a>
+            <a href="#portfolio" class="nav-link">Portfolio</a>
+            <a href="#propos" class="nav-link">À Propos</a>
+            <a href="#contact" class="nav-link">Contact</a>
+        </nav>
+    </header>
+
+    <section id="accueil" class="visible">
+        <h1 class="hero-title">VINCENT DESROCHERS</h1>
+        <p class="hero-subtitle">Compositeur de musique à l'image. Donner un souffle épique, narratif et immersif à vos récits visuels.</p>
+        
+        <div class="showreel-container">
+            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen loading="lazy"></iframe>
+        </div>
+        <a href="#portfolio" class="btn">Découvrir mes projets</a>
+    </section>
+
+    <section id="portfolio">
+        <h2>Projets Phares</h2>
+        <div class="project-grid">
+            
+            <div class="project-card">
+                <div class="project-media">
+                    <div class="video-box">
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen loading="lazy"></iframe>
+                    </div>
+                    <div class="audio-box">
+                        <h4><i class="fa-solid fa-music"></i> Piste Audio Seule (Haute Qualité)</h4>
+                        <audio controls preload="none">
+                            <source src="votre-audio-1.mp3" type="audio/mpeg">
+                            Votre navigateur ne supporte pas l'élément audio.
+                        </audio>
+                    </div>
+                </div>
+                <div class="project-info">
+                    <h3>Le Souffle des Abysses</h3>
+                    <p><strong>Type :</strong> Court-métrage de Science-Fiction / Drame</p>
+                    <p>Composition d'une partition hybride mêlant orchestre symphonique lourd, textures électroniques sombres et Sound Design organique. L'objectif était de retransmettre l'immensité étouffante des fonds marins.</p>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-media">
+                    <div class="video-box">
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen loading="lazy"></iframe>
+                    </div>
+                    <div class="audio-box">
+                        <h4><i class="fa-solid fa-music"></i> Piste Audio Seule (Haute Qualité)</h4>
+                        <audio controls preload="none">
+                            <source src="votre-audio-2.mp3" type="audio/mpeg">
+                        </audio>
+                    </div>
+                </div>
+                <div class="project-info">
+                    <h3>Échos de l'Horizon</h3>
+                    <p><strong>Type :</strong> Publicité / Identité de marque cinématographique</p>
+                    <p>Création d'un thème épuré au piano solo, soutenu progressivement par un crescendo de cordes et de percussions légères. Un travail axé sur l'émotion brute et la pureté mélodique.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="propos">
+        <div class="about-layout">
+            <div class="bio-text">
+                <h2>À Propos</h2>
+                <p>Actuellement étudiant en composition de musique à l’image, je traduis les émotions visuelles en architectures sonores. Fasciné par la puissance narrative de la musique au cinéma, j'explore l'interaction entre les instruments acoustiques traditionnels et la modernité des synthétiseurs.</p>
+                <p>Mon processus créatif est guidé par une étroite collaboration avec les réalisateurs pour concevoir une identité sonore sur-mesure, servant l'histoire avant tout.</p>
+            </div>
+            
+            <div class="bio-skills">
+                <h2>Compétences</h2>
+                <div class="skills-grid">
+                    <div class="skill-category">
+                        <h4>Logiciels (DAW)</h4>
+                        <ul>
+                            <li>Cubase Pro</li>
+                            <li>Logic Pro X</li>
+                            <li>Pro Tools</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h4>Instruments</h4>
+                        <ul>
+                            <li>Piano (Classique/Jazz)</li>
+                            <li>Synthétiseurs Analogiques</li>
+                            <li>Percussions</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h4>Styles Maîtrisés</h4>
+                        <ul>
+                            <li>Orchestral / Épique</li>
+                            <li>Ambient / Textural</li>
+                            <li>Hybride / Électronique</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2>Collaborons Ensemble</h2>
+        <div class="contact-container">
+            <div class="contact-info">
+                <h3>Un projet, un film, une idée ?</h3>
+                <p>Que vous soyez réalisateur, studio de jeu vidéo ou producteur, n'hésitez pas à me contacter pour discuter de votre univers sonore.</p>
+                
+                <div class="social-links">
+                    <a href="#" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#" target="_blank" title="SoundCloud"><i class="fa-brands fa-soundcloud"></i></a>
+                    <a href="#" target="_blank" title="Vimeo"><i class="fa-brands fa-vimeo"></i></a>
+                    <a href="mailto:contact@vincentdesrochers.com" title="Email"><i class="fa-solid fa-envelope"></i></a>
+                </div>
+            </div>
+
+            <form class="contact-form" action="#" method="POST">
+                <div class="form-group">
+                    <label for="name">Nom / Studio</label>
+                    <input type="text" id="name" required placeholder="Votre nom">
+                </div>
+                <div class="form-group">
+                    <label for="email">Adresse Email</label>
+                    <input type="email" id="email" required placeholder="votre@email.com">
+                </div>
+                <div class="form-group">
+                    <label for="message">Votre Message</label>
+                    <textarea id="message" rows="5" required placeholder="Parlez-moi de votre projet..."></textarea>
+                </div>
+                <button type="submit" class="btn">Envoyer</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 VinceD - Vincent Desrochers. Tous droits réservés.</p>
+    </footer>
+
+    <script>
+        // --- 1. TRANSITION IMMERSIVE (Intersection Observer) ---
+        // Fait apparaître les sections en fondu/glissement lors du défilement
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        const observerOptions = {
+            root: null,
+            threshold: 0.2 // Déclenche lorsque 20% de la section est visible
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Mise à jour de la navigation active
+                    navLinks.forEach(link => {
+                        if (link.getAttribute('href').substring(1) === entry.target.id) {
+                            link.classList.add('active');
+                        } else {
+                            link.classList.remove('active');
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => observer.observe(section));
+
+        // --- 2. EFFET DE PARALLAX AU SCROLL SUR LES NUAGES ---
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const cloud1 = document.querySelector('.cloud1');
+            const cloud2 = document.querySelector('.cloud2');
+            const cloud3 = document.querySelector('.cloud3');
+
+            // Modifie la vitesse de déplacement vertical de chaque couche de faux nuages
+            cloud1.style.transform = `translateY(${scrolled * 0.15}px)`;
+            cloud2.style.transform = `translateY(${scrolled * -0.1}px)`;
+            cloud3.style.transform = `translateY(${scrolled * 0.05}px)`;
+        });
+    </script>
+</body>
+</html>
