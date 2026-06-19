@@ -1,813 +1,166 @@
-Voici le code complet pour votre site web portfolio. Il s'agit d'un fichier HTML unique contenant le style (CSS) et la logique (JavaScript).
-
-Pour l'utiliser, copiez le code ci-dessous, collez-le dans un éditeur de texte (comme Notepad, VS Code ou Sublime Text) et enregistrez le fichier sous le nom `index.html`. Vous pourrez ensuite l'ouvrir directement dans n'importe quel navigateur web.
-
-```html
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio | Compositeur Musique à l'Image</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
-    <style>
-        /* === VARIABLES & RESET === */
-        :root {
-            --bg-color: #0a0e17; /* Bleu nuit profond */
-            --surface-color: #121826;
-            --text-main: #f0f2f5;
-            --text-muted: #9ba3b5;
-            --accent-gold: #d4af37;
-            --accent-terra: #e26d5c;
-            --font-display: 'Cinzel', serif;
-            --font-body: 'Montserrat', sans-serif;
-            --transition: all 0.3s ease;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: var(--font-body);
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        h1, h2, h3 {
-            font-family: var(--font-display);
-            font-weight: 600;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        ul {
-            list-style: none;
-        }
-
-        /* === NAVIGATION === */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 1.5rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(10, 14, 23, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .logo {
-            font-family: var(--font-display);
-            font-size: 1.5rem;
-            color: var(--accent-gold);
-            letter-spacing: 2px;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .nav-links a {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: var(--transition);
-        }
-
-        .nav-links a:hover {
-            color: var(--accent-gold);
-        }
-
-        .lang-toggle {
-            background: transparent;
-            border: 1px solid var(--accent-gold);
-            color: var(--accent-gold);
-            padding: 0.3rem 0.8rem;
-            cursor: pointer;
-            border-radius: 3px;
-            font-family: var(--font-body);
-            transition: var(--transition);
-        }
-
-        .lang-toggle:hover {
-            background: var(--accent-gold);
-            color: var(--bg-color);
-        }
-
-        /* === SECTIONS === */
-        section {
-            padding: 100px 5%;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .section-title {
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            text-align: center;
-            color: var(--accent-gold);
-        }
-
-        /* === HERO === */
-        #hero {
-            text-align: center;
-            background: radial-gradient(circle at center, #1a2235 0%, #0a0e17 70%);
-        }
-
-        .hero-title {
-            font-size: clamp(3rem, 5vw, 5rem);
-            margin-bottom: 1rem;
-        }
-
-        .hero-subtitle {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            margin-bottom: 2.5rem;
-            max-width: 600px;
-            margin-inline: auto;
-        }
-
-        .cta-btn {
-            display: inline-block;
-            background: var(--accent-terra);
-            color: white;
-            padding: 1rem 2.5rem;
-            border-radius: 30px;
-            font-weight: 500;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            transition: var(--transition);
-            border: 2px solid transparent;
-        }
-
-        .cta-btn:hover {
-            background: transparent;
-            border-color: var(--accent-terra);
-            color: var(--accent-terra);
-        }
-
-        /* === ABOUT === */
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .about-img {
-            width: 100%;
-            aspect-ratio: 4/5;
-            object-fit: cover;
-            border-radius: 10px;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            box-shadow: 15px 15px 0px rgba(226, 109, 92, 0.2);
-        }
-
-        .academic-list {
-            margin-top: 2rem;
-            border-left: 2px solid var(--accent-gold);
-            padding-left: 1.5rem;
-        }
-
-        .academic-list li {
-            margin-bottom: 1rem;
-        }
-
-        .academic-year {
-            color: var(--accent-gold);
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        /* === AUDIO PORTFOLIO === */
-        .audio-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: var(--surface-color);
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 2rem;
-        }
-
-        /* Custom Player */
-        .player-ui {
-            background: var(--bg-color);
-            padding: 2rem;
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .track-art {
-            width: 150px;
-            height: 150px;
-            background: linear-gradient(45deg, var(--accent-gold), var(--accent-terra));
-            border-radius: 50%;
-            margin-bottom: 1.5rem;
-            animation: spin 10s linear infinite;
-            animation-play-state: paused;
-        }
-
-        .track-art.playing {
-            animation-play-state: running;
-        }
-
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-
-        .player-controls {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            margin: 1.5rem 0;
-        }
-
-        .play-btn {
-            background: var(--accent-gold);
-            border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--bg-color);
-            font-size: 1.2rem;
-            transition: transform 0.2s;
-        }
-
-        .play-btn:hover { transform: scale(1.1); }
-
-        .progress-container {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.8rem;
-            color: var(--text-muted);
-        }
-
-        input[type="range"] {
-            flex-grow: 1;
-            accent-color: var(--accent-terra);
-            cursor: pointer;
-        }
-
-        /* Playlist */
-        .playlist-filters {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            background: transparent;
-            border: 1px solid var(--text-muted);
-            color: var(--text-muted);
-            padding: 0.4rem 1rem;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .filter-btn.active, .filter-btn:hover {
-            border-color: var(--accent-gold);
-            color: var(--accent-gold);
-        }
-
-        .playlist {
-            max-height: 350px;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-
-        .playlist::-webkit-scrollbar { width: 5px; }
-        .playlist::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 5px; }
-
-        .track-item {
-            padding: 1rem;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            transition: var(--transition);
-        }
-
-        .track-item:hover, .track-item.active {
-            background: rgba(255,255,255,0.05);
-            border-left: 3px solid var(--accent-gold);
-        }
-
-        .track-category {
-            font-size: 0.75rem;
-            color: var(--accent-terra);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* === VIDEO PORTFOLIO === */
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .video-card {
-            background: var(--surface-color);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .video-wrapper {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 aspect ratio */
-            height: 0;
-            background: #000;
-        }
-
-        .video-wrapper iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
-
-        .video-info { padding: 1.5rem; }
-        .video-info h3 { margin-bottom: 0.5rem; font-size: 1.2rem; }
-        .video-info p { color: var(--text-muted); font-size: 0.9rem; }
-
-        /* === SERVICES === */
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .service-card {
-            background: var(--surface-color);
-            padding: 2.5rem 2rem;
-            border-radius: 10px;
-            text-align: center;
-            border-top: 3px solid var(--accent-terra);
-            transition: var(--transition);
-        }
-
-        .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-        }
-
-        .service-icon {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        /* === CONTACT === */
-        .contact-container {
-            max-width: 600px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .form-group { margin-bottom: 1.5rem; }
-        
-        input, select, textarea {
-            width: 100%;
-            padding: 1rem;
-            background: var(--surface-color);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: white;
-            border-radius: 5px;
-            font-family: var(--font-body);
-        }
-
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--accent-gold);
-        }
-
-        textarea { resize: vertical; min-height: 150px; }
-
-        .submit-btn {
-            width: 100%;
-            background: var(--accent-gold);
-            color: var(--bg-color);
-            border: none;
-            padding: 1rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: var(--transition);
-        }
-
-        .submit-btn:hover { background: white; }
-
-        /* === FOOTER === */
-        footer {
-            text-align: center;
-            padding: 3rem;
-            background: var(--surface-color);
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .social-links a {
-            color: var(--text-muted);
-            font-size: 1.5rem;
-        }
-
-        .social-links a:hover { color: var(--accent-terra); }
-
-        /* === ANIMATIONS === */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* === RESPONSIVE === */
-        @media (max-width: 900px) {
-            .about-grid, .audio-container { grid-template-columns: 1fr; }
-            .nav-links { display: none; /* Simplification for mobile */ }
-            .player-ui { border-bottom: 1px solid rgba(255,255,255,0.05); border-right: none; }
-        }
-        
-        @media (max-width: 600px) {
-            .video-grid { grid-template-columns: 1fr; }
-            section { padding: 80px 5%; }
-        }
-    </style>
-</head>
-<body>
-
-    <nav>
-        <div class="logo">ELIAS.M</div>
-        <div class="nav-links">
-            <a href="#about" class="lang" data-fr="À propos" data-en="About">À propos</a>
-            <a href="#audio" class="lang" data-fr="Portfolio Audio" data-en="Audio Portfolio">Portfolio Audio</a>
-            <a href="#video" class="lang" data-fr="Projets Vidéo" data-en="Video Projects">Projets Vidéo</a>
-            <a href="#services" class="lang" data-fr="Services" data-en="Services">Services</a>
-            <a href="#contact" class="lang" data-fr="Contact" data-en="Contact">Contact</a>
-        </div>
-        <button id="lang-btn" class="lang-toggle" onclick="toggleLanguage()">EN</button>
-    </nav>
-
-    <section id="hero">
-        <div class="fade-in">
-            <h1 class="hero-title">Elias Moreau</h1>
-            <p class="hero-subtitle lang" 
-               data-fr="Compositeur & Designer Sonore. Donner vie aux images par la musique, des jeux vidéo au cinéma indépendant."
-               data-en="Composer & Sound Designer. Breathing life into visual media through music, from video games to indie films.">
-               Compositeur & Designer Sonore. Donner vie aux images par la musique, des jeux vidéo au cinéma indépendant.
-            </p>
-            <a href="#audio" class="cta-btn lang" data-fr="Écouter mon travail" data-en="Listen to my work">Écouter mon travail</a>
-        </div>
-    </section>
-
-    <section id="about">
-        <h2 class="section-title lang" data-fr="À propos" data-en="About Me">À propos</h2>
-        <div class="about-grid fade-in">
-            <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Composer working in studio" class="about-img">
-            <div>
-                <p class="lang" style="margin-bottom: 1.5rem;"
-                   data-fr="Étudiant passionné en Musique à l'Image au Conservatoire, je fusionne l'orchestration classique avec des textures synthétiques modernes. Mon objectif est de créer des identités sonores uniques qui renforcent la narration visuelle."
-                   data-en="Passionate media music student at the Conservatory, I blend classical orchestration with modern synthetic textures. My goal is to create unique sonic identities that enhance visual storytelling.">
-                   Étudiant passionné en Musique à l'Image au Conservatoire, je fusionne l'orchestration classique avec des textures synthétiques modernes. Mon objectif est de créer des identités sonores uniques qui renforcent la narration visuelle.
-                </p>
-                <h3 class="lang" data-fr="Parcours Académique" data-en="Academic Background">Parcours Académique</h3>
-                <ul class="academic-list">
-                    <li>
-                        <span class="academic-year">2023 - Présent</span><br>
-                        <span class="lang" data-fr="Master Musique Appliquée aux Arts Visuels" data-en="Master's in Music for Visual Arts">Master Musique Appliquée aux Arts Visuels</span>
-                    </li>
-                    <li>
-                        <span class="academic-year">2020 - 2023</span><br>
-                        <span class="lang" data-fr="Licence Musicologie & Composition" data-en="Bachelor in Musicology & Composition">Licence Musicologie & Composition</span>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <section id="audio">
-        <h2 class="section-title lang" data-fr="Portfolio Audio" data-en="Audio Portfolio">Portfolio Audio</h2>
-        <div class="audio-container fade-in">
-            <div class="player-ui">
-                <div class="track-art" id="track-art"></div>
-                <h3 id="current-title" style="margin-bottom: 0.5rem;">Sélectionnez une piste</h3>
-                <p id="current-category" class="track-category">---</p>
-                
-                <div class="player-controls">
-                    <button class="play-btn" id="play-pause-btn">▶</button>
-                </div>
-                
-                <div class="progress-container">
-                    <span id="current-time">0:00</span>
-                    <input type="range" id="seek-slider" max="100" value="0">
-                    <span id="duration-time">0:00</span>
-                </div>
-                
-                <audio id="native-audio" src=""></audio>
-            </div>
-
-            <div>
-                <div class="playlist-filters">
-                    <button class="filter-btn active" data-filter="all">All</button>
-                    <button class="filter-btn" data-filter="game">Games</button>
-                    <button class="filter-btn" data-filter="film">Film/Doc</button>
-                    <button class="filter-btn" data-filter="ad">Ads</button>
-                </div>
-                <ul class="playlist" id="playlist-container">
-                    </ul>
-            </div>
-        </div>
-    </section>
-
-    <section id="video">
-        <h2 class="section-title lang" data-fr="Projets Vidéo" data-en="Video Projects">Projets Vidéo</h2>
-        <div class="video-grid fade-in">
-            <div class="video-card">
-                <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/ScMzIvxBSi4?controls=0" allowfullscreen></iframe>
-                </div>
-                <div class="video-info">
-                    <h3 class="lang" data-fr="The Last Journey - Bande Annonce" data-en="The Last Journey - Trailer">The Last Journey - Bande Annonce</h3>
-                    <p class="lang" data-fr="Jeu Indépendant (Projet Étudiant) • Orchestral" data-en="Indie Game (Student Project) • Orchestral">Jeu Indépendant (Projet Étudiant) • Orchestral</p>
-                </div>
-            </div>
-            <div class="video-card">
-                <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/LXb3EKWsInQ?controls=0" allowfullscreen></iframe>
-                </div>
-                <div class="video-info">
-                    <h3 class="lang" data-fr="Nature Morte - Court Métrage" data-en="Still Life - Short Film">Nature Morte - Court Métrage</h3>
-                    <p class="lang" data-fr="Cinéma • Ambiant / Synth" data-en="Film • Ambient / Synth">Cinéma • Ambiant / Synth</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="services">
-        <h2 class="section-title lang" data-fr="Mes Services" data-en="My Services">Mes Services</h2>
-        <div class="services-grid fade-in">
-            <div class="service-card">
-                <div class="service-icon">🎮</div>
-                <h3 class="lang" data-fr="Jeux Vidéo" data-en="Video Games">Jeux Vidéo</h3>
-                <p class="lang" data-fr="Musique interactive et boucles adaptatives intégrées pour moteurs de jeu." data-en="Interactive music and adaptive loops for game engines.">Musique interactive et boucles adaptatives intégrées pour moteurs de jeu.</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon">🎬</div>
-                <h3 class="lang" data-fr="Cinéma & Fiction" data-en="Film & Fiction">Cinéma & Fiction</h3>
-                <p class="lang" data-fr="Bandes originales sur mesure pour courts et longs métrages, soulignant l'émotion." data-en="Custom original soundtracks for short and feature films, emphasizing emotion.">Bandes originales sur mesure pour courts et longs métrages, soulignant l'émotion.</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon">✨</div>
-                <h3 class="lang" data-fr="Pub & Motion Design" data-en="Ads & Motion Design">Pub & Motion Design</h3>
-                <p class="lang" data-fr="Compositions percutantes et modernes pour habillage de marque et publicités." data-en="Impactful and modern compositions for branding and commercials.">Compositions percutantes et modernes pour habillage de marque et publicités.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="contact">
-        <h2 class="section-title lang" data-fr="Discutons de votre projet" data-en="Let's discuss your project">Discutons de votre projet</h2>
-        <div class="contact-container fade-in">
-            <form onsubmit="event.preventDefault(); alert('Message envoyé ! (Simulation)');">
-                <div class="form-group">
-                    <input type="text" placeholder="Nom / Name" required>
-                </div>
-                <div class="form-group">
-                    <input type="email" placeholder="Email" required>
-                </div>
-                <div class="form-group">
-                    <select required>
-                        <option value="" disabled selected class="lang" data-fr="Type de projet..." data-en="Project type...">Type de projet...</option>
-                        <option value="game" class="lang" data-fr="Jeu Vidéo" data-en="Video Game">Jeu Vidéo</option>
-                        <option value="film" class="lang" data-fr="Film / Court-métrage" data-en="Film / Short Film">Film / Court-métrage</option>
-                        <option value="ad" class="lang" data-fr="Publicité" data-en="Advertisement">Publicité</option>
-                        <option value="other" class="lang" data-fr="Autre" data-en="Other">Autre</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <textarea placeholder="Votre message / Your message" required></textarea>
-                </div>
-                <button type="submit" class="submit-btn lang" data-fr="Envoyer" data-en="Send Message">Envoyer</button>
-            </form>
-        </div>
-    </section>
-
-    <footer>
-        <div class="social-links">
-            <a href="#">SoundCloud</a>
-            <a href="#">YouTube</a>
-            <a href="#">LinkedIn</a>
-        </div>
-        <p class="lang" data-fr="© 2026 Elias Moreau. Tous droits réservés." data-en="© 2026 Elias Moreau. All rights reserved.">© 2026 Elias Moreau. Tous droits réservés.</p>
-    </footer>
-
-    <script>
-        /* === BILINGUAL TOGGLE === */
-        let currentLang = 'fr';
-        
-        function toggleLanguage() {
-            currentLang = currentLang === 'fr' ? 'en' : 'fr';
-            document.getElementById('lang-btn').innerText = currentLang === 'fr' ? 'EN' : 'FR';
-            
-            document.querySelectorAll('.lang').forEach(el => {
-                if(el.tagName.toLowerCase() === 'input' || el.tagName.toLowerCase() === 'textarea') {
-                    el.placeholder = el.getAttribute(`data-${currentLang}`);
-                } else {
-                    el.innerText = el.getAttribute(`data-${currentLang}`);
-                }
-            });
-            renderPlaylist(); // Re-render playlist to update titles if needed
-        }
-
-        /* === SCROLL ANIMATIONS (Fade-in) === */
-        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.fade-in').forEach(element => {
-            observer.observe(element);
-        });
-
-        /* === CUSTOM AUDIO PLAYER LOGIC === */
-        // Placeholder data (Using free public domain URLs for demonstration)
-        const tracks = [
-            { id: 1, title_fr: "Bataille Épique", title_en: "Epic Battle", cat: "game", duration: "1:42", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
-            { id: 2, title_fr: "Exploration Spatiale", title_en: "Space Exploration", cat: "game", duration: "2:15", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
-            { id: 3, title_fr: "Larmes sous la pluie", title_en: "Tears in the Rain", cat: "film", duration: "3:05", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
-            { id: 4, title_fr: "Dynamique Corporate", title_en: "Corporate Dynamics", cat: "ad", duration: "0:45", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
-            { id: 5, title_fr: "Mystères Profonds", title_en: "Deep Mysteries", cat: "film", duration: "2:30", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" }
-        ];
-
-        let currentFilter = 'all';
-        let currentTrackId = null;
-        const audioEl = document.getElementById('native-audio');
-        const playBtn = document.getElementById('play-pause-btn');
-        const seekSlider = document.getElementById('seek-slider');
-        const currentTimeEl = document.getElementById('current-time');
-        const durationTimeEl = document.getElementById('duration-time');
-        const trackArt = document.getElementById('track-art');
-
-        // Render Playlist based on filter
-        function renderPlaylist() {
-            const container = document.getElementById('playlist-container');
-            container.innerHTML = '';
-            
-            const filteredTracks = currentFilter === 'all' 
-                ? tracks 
-                : tracks.filter(t => t.cat === currentFilter);
-
-            filteredTracks.forEach(track => {
-                const li = document.createElement('li');
-                li.className = `track-item ${currentTrackId === track.id ? 'active' : ''}`;
-                li.onclick = () => loadTrack(track.id);
-                
-                const title = currentLang === 'fr' ? track.title_fr : track.title_en;
-                
-                li.innerHTML = `
-                    <div>
-                        <div style="font-weight: 500;">${title}</div>
-                        <div class="track-category">${track.cat.toUpperCase()}</div>
-                    </div>
-                    <div style="color: var(--text-muted); font-size: 0.9rem;">${track.duration}</div>
-                `;
-                container.appendChild(li);
-            });
-        }
-
-        // Filter Logic
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                e.target.classList.add('active');
-                currentFilter = e.target.getAttribute('data-filter');
-                renderPlaylist();
-            });
-        });
-
-        // Load & Play Track
-        function loadTrack(id) {
-            const track = tracks.find(t => t.id === id);
-            currentTrackId = id;
-            
-            audioEl.src = track.src;
-            document.getElementById('current-title').innerText = currentLang === 'fr' ? track.title_fr : track.title_en;
-            document.getElementById('current-category').innerText = track.cat.toUpperCase();
-            
-            renderPlaylist(); // Update active class
-            togglePlay(true);
-        }
-
-        // Play/Pause Toggle
-        function togglePlay(forcePlay = false) {
-            if(!currentTrackId && tracks.length > 0) {
-                loadTrack(tracks[0].id);
-                return;
-            }
-
-            if (audioEl.paused || forcePlay) {
-                audioEl.play();
-                playBtn.innerText = '⏸';
-                trackArt.classList.add('playing');
-            } else {
-                audioEl.pause();
-                playBtn.innerText = '▶';
-                trackArt.classList.remove('playing');
-            }
-        }
-
-        playBtn.addEventListener('click', () => togglePlay());
-
-        // Update Progress Bar
-        audioEl.addEventListener('timeupdate', () => {
-            const progress = (audioEl.currentTime / audioEl.duration) * 100;
-            seekSlider.value = progress || 0;
-            
-            let currentMins = Math.floor(audioEl.currentTime / 60);
-            let currentSecs = Math.floor(audioEl.currentTime - currentMins * 60);
-            if(currentSecs < 10) currentSecs = "0" + currentSecs;
-            currentTimeEl.innerText = `${currentMins}:${currentSecs}`;
-            
-            if(audioEl.duration) {
-                let durationMins = Math.floor(audioEl.duration / 60);
-                let durationSecs = Math.floor(audioEl.duration - durationMins * 60);
-                if(durationSecs < 10) durationSecs = "0" + durationSecs;
-                durationTimeEl.innerText = `${durationMins}:${durationSecs}`;
-            }
-        });
-
-        // Seek Audio
-        seekSlider.addEventListener('input', () => {
-            const seekTo = audioEl.duration * (seekSlider.value / 100);
-            audioEl.currentTime = seekTo;
-        });
-
-        // Auto-next track when ended
-        audioEl.addEventListener('ended', () => {
-            playBtn.innerText = '▶';
-            trackArt.classList.remove('playing');
-            seekSlider.value = 0;
-        });
-
-        // Initialization
-        renderPlaylist();
-    </script>
-</body>
-</html>
-
-```
+/* ============================================================
+   CLOUD CANVAS — animated storm background with parallax layers
+   ============================================================ */
+(function () {
+  const canvas = document.getElementById('sky');
+  const ctx = canvas.getContext('2d');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let W, H, DPR;
+  function resize() {
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width = W * DPR;
+    canvas.height = H * DPR;
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // Cloud "blobs" — soft radial gradients drifting at different speeds (parallax layers)
+  function makeBlob(layer) {
+    const speedBase = layer === 0 ? 0.06 : layer === 1 ? 0.12 : 0.2;
+    const hueSets = [
+      ['rgba(14, 33, 82, 0.55)', 'rgba(14, 33, 82, 0)'],
+      ['rgba(29, 77, 143, 0.5)', 'rgba(29, 77, 143, 0)'],
+      ['rgba(79, 143, 209, 0.35)', 'rgba(79, 143, 209, 0)'],
+      ['rgba(232, 160, 79, 0.12)', 'rgba(232, 160, 79, 0)']
+    ];
+    const colors = hueSets[Math.floor(Math.random() * hueSets.length)];
+    return {
+      layer,
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: (200 + Math.random() * 320) * (1 + layer * 0.4),
+      vx: (Math.random() - 0.5) * speedBase,
+      vy: (Math.random() - 0.5) * speedBase * 0.4,
+      colors
+    };
+  }
+
+  let blobs = [];
+  function initBlobs() {
+    blobs = [];
+    const counts = [4, 5, 4]; // back, mid, front layers
+    counts.forEach((count, layer) => {
+      for (let i = 0; i < count; i++) blobs.push(makeBlob(layer));
+    });
+  }
+  initBlobs();
+
+  // Scroll-driven drift offset — adds extra motion when changing sections
+  let scrollDrift = 0;
+  let targetDrift = 0;
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    // base sky gradient
+    const base = ctx.createRadialGradient(W * 0.5, H * 0.15, 0, W * 0.5, H * 0.5, Math.max(W, H) * 0.9);
+    base.addColorStop(0, '#10295c');
+    base.addColorStop(0.45, '#081636');
+    base.addColorStop(1, '#050b1a');
+    ctx.fillStyle = base;
+    ctx.fillRect(0, 0, W, H);
+
+    blobs.forEach((b) => {
+      if (!reduceMotion) {
+        b.x += b.vx + scrollDrift * (0.15 + b.layer * 0.1);
+        b.y += b.vy;
+
+        if (b.x < -b.r) b.x = W + b.r;
+        if (b.x > W + b.r) b.x = -b.r;
+        if (b.y < -b.r) b.y = H + b.r;
+        if (b.y > H + b.r) b.y = -b.r;
+      }
+
+      const g = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
+      g.addColorStop(0, b.colors[0]);
+      g.addColorStop(1, b.colors[1]);
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    // ease drift back to baseline
+    scrollDrift += (targetDrift - scrollDrift) * 0.08;
+
+    requestAnimationFrame(draw);
+  }
+  draw();
+
+  // Trigger extra drift burst on section change (wheel/scroll)
+  let lastScrollY = window.scrollY;
+  let driftTimeout;
+  window.addEventListener('scroll', () => {
+    const delta = window.scrollY - lastScrollY;
+    lastScrollY = window.scrollY;
+    targetDrift = Math.max(-2.5, Math.min(2.5, delta * 0.08));
+    clearTimeout(driftTimeout);
+    driftTimeout = setTimeout(() => { targetDrift = 0; }, 400);
+  }, { passive: true });
+
+})();
+
+/* ============================================================
+   NAV — background on scroll
+   ============================================================ */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 40) nav.classList.add('scrolled');
+  else nav.classList.remove('scrolled');
+}, { passive: true });
+
+/* ============================================================
+   SCROLL REVEAL — projects fade/rise into view
+   ============================================================ */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in-view');
+    }
+  });
+}, { threshold: 0.2 });
+
+document.querySelectorAll('.project').forEach((el) => observer.observe(el));
+
+/* ============================================================
+   PLAY BUTTONS — placeholder interaction
+   (Replace with real audio src when tracks are ready)
+   ============================================================ */
+document.querySelectorAll('.play-btn').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const isPlaying = btn.classList.contains('playing');
+    document.querySelectorAll('.play-btn.playing').forEach((b) => {
+      b.classList.remove('playing');
+      b.textContent = '▶ Écouter la piste';
+    });
+    if (!isPlaying) {
+      btn.classList.add('playing');
+      btn.textContent = '⏸ En cours d\'écoute';
+    }
+  });
+});
+
+/* ============================================================
+   CONTACT FORM — placeholder submit handling
+   ============================================================ */
+const form = document.getElementById('contact-form');
+if (form) {
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const btn = form.querySelector('.submit-btn');
+    const original = btn.textContent;
+    btn.textContent = 'Message envoyé ✓';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.textContent = original;
+      btn.disabled = false;
+      form.reset();
+    }, 2600);
+  });
+}
