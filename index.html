@@ -4,13 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VinceD | Compositeur de Musique à l'Image</title>
-    <!-- Google Fonts: Titres en Cinzel (Sérif élégant & cinématique), Corps en Inter (Sans-sérif ultra-lisible) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     
     <style>
-        /* --- VARIABLES ET THÈME --- */
         :root {
             --bg-dark: #060b14;
             --card-bg: rgba(11, 22, 42, 0.65);
@@ -23,7 +21,6 @@
             --transition-smooth: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        /* --- RESET & BASES --- */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -42,40 +39,49 @@
             line-height: 1.6;
         }
 
-        /* --- ARRIÈRE-PLAN ANIMÉ EN PARALLAXE --- */
-        .parallax-bg {
+        /* --- STRUCTURE DU FOND CORRIGÉE --- */
+        .parallax-container {
             position: fixed;
             top: 0;
             left: 0;
-            width: 110%; /* Légèrement plus grand pour éviter les bords blancs pendant le mouvement */
-            height: 110%;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            will-change: transform;
+            overflow: hidden;
+        }
+
+        .parallax-bg {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 120%; /* Plus grand pour tolérer les mouvements sans bordures blanches */
+            height: 120%;
             background-image: url('_1781876399e3fd334ae7ec348ca200b2620a3b03f922d5e931abdbe772887c67f0da0035d9.webp');
             background-size: cover;
             background-position: center;
-            z-index: -2;
-            animation: cloudPan 80s linear infinite alternate;
-            will-change: transform;
+            animation: cloudPan 120s linear infinite alternate;
         }
 
-        /* Voile sombre pour garantir la lisibilité du texte */
         .ambient-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(180deg, rgba(6, 11, 20, 0.5) 0%, rgba(6, 11, 20, 0.85) 100%);
+            background: linear-gradient(180deg, rgba(6, 11, 20, 0.4) 0%, rgba(6, 11, 20, 0.8) 100%);
             z-index: -1;
             pointer-events: none;
         }
 
+        /* Animation organique et lente des nuages */
         @keyframes cloudPan {
             0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(-3%, -2%) scale(1.05); }
-            100% { transform: translate(-5%, -4%) scale(1.02); }
+            50% { transform: translate(-2%, -3%) scale(1.04); }
+            100% { transform: translate(-4%, -1%) scale(1.01); }
         }
 
-        /* --- SÉCTIONS ET TRANSITIONS (Cloud Crossing Effect) --- */
+        /* --- SECTIONS ET EFFETS --- */
         section {
             min-height: 100vh;
             padding: 100px 20px;
@@ -100,7 +106,6 @@
             margin: 0 auto;
         }
 
-        /* --- TYPOGRAPHIE RESPONSIVE --- */
         h1, h2, h3 {
             font-family: var(--font-title);
             letter-spacing: 2px;
@@ -131,7 +136,6 @@
             font-weight: 300;
         }
 
-        /* --- INTERACTIVITÉ & BOUTONS (Lueur dorée) --- */
         .btn-gold {
             display: inline-block;
             padding: 12px 30px;
@@ -145,8 +149,6 @@
             text-transform: uppercase;
             cursor: pointer;
             transition: var(--transition-smooth);
-            position: relative;
-            overflow: hidden;
         }
 
         .btn-gold:hover {
@@ -166,8 +168,9 @@
             justify-content: space-between;
             align-items: center;
             z-index: 100;
-            background: rgba(6, 11, 20, 0.4);
+            background: rgba(6, 11, 20, 0.5);
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
@@ -203,7 +206,7 @@
             text-shadow: 0 0 8px var(--accent-gold-glow);
         }
 
-        /* --- SECTION 1 : ACCUEIL --- */
+        /* --- ACCUEIL --- */
         #accueil {
             text-align: center;
             padding-top: 150px;
@@ -212,7 +215,6 @@
         .hero-content h1 {
             font-size: 4rem;
             margin-bottom: 10px;
-            animation: fadeInDown 1.5s ease;
         }
 
         .hero-content .subtitle {
@@ -235,13 +237,13 @@
             overflow: hidden;
         }
 
-        .showreel-container iframe, .showreel-container video {
+        .showreel-container iframe {
             width: 100%;
             height: 100%;
             border: none;
         }
 
-        /* --- SECTION 2 : PORTFOLIO / PROJETS --- */
+        /* --- PORTFOLIO --- */
         .project-card {
             background: var(--card-bg);
             backdrop-filter: blur(12px);
@@ -250,7 +252,6 @@
             border-radius: 8px;
             padding: 30px;
             margin-bottom: 40px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
         }
 
         .project-title {
@@ -261,7 +262,6 @@
             text-align: left;
         }
 
-        /* Présentation vidéo et audio à parts égales */
         .project-media-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -269,16 +269,11 @@
             align-items: center;
         }
 
-        .media-box {
-            width: 100%;
-        }
-
         .media-box h4 {
             font-family: var(--font-title);
             font-size: 0.9rem;
             color: var(--text-dim);
             margin-bottom: 12px;
-            letter-spacing: 1px;
             text-transform: uppercase;
         }
 
@@ -289,12 +284,6 @@
             overflow: hidden;
         }
 
-        .video-wrapper video, .video-wrapper iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
         .audio-wrapper {
             background: rgba(6, 11, 20, 0.6);
             padding: 30px 20px;
@@ -303,7 +292,6 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            height: 100%;
             min-height: 150px;
         }
 
@@ -312,10 +300,11 @@
             margin-top: 10px;
         }
 
-        /* --- SECTION 3 : À PROPOS --- */
+        /* --- BIO --- */
         .bio-content {
             background: var(--card-bg);
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             padding: 40px;
             border-radius: 8px;
@@ -328,7 +317,7 @@
             text-align: justify;
         }
 
-        /* --- SECTION 4 : COMPÉTENCES --- */
+        /* --- COMPÉTENCES --- */
         .skills-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -338,6 +327,7 @@
         .skills-category {
             background: var(--card-bg);
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             padding: 30px;
             border-radius: 8px;
@@ -352,7 +342,6 @@
 
         .skills-category h3 {
             color: var(--accent-gold);
-            font-size: 1.2rem;
             margin-bottom: 20px;
         }
 
@@ -361,19 +350,18 @@
         }
 
         .skills-category li {
-            color: var(--text-light);
             margin-bottom: 10px;
-            font-size: 1rem;
             font-weight: 300;
         }
 
-        /* --- SECTION 5 : CONTACT --- */
+        /* --- CONTACT --- */
         .contact-wrapper {
             max-width: 600px;
             margin: 0 auto;
             width: 100%;
             background: var(--card-bg);
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             padding: 40px;
             border-radius: 8px;
@@ -398,15 +386,12 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
             color: #fff;
             font-family: var(--font-body);
-            font-size: 1rem;
             border-radius: 4px;
-            transition: var(--transition-smooth);
         }
 
         .form-group input:focus, .form-group textarea:focus {
             outline: none;
             border-color: var(--accent-gold);
-            box-shadow: 0 0 10px rgba(229, 193, 88, 0.2);
         }
 
         .contact-links {
@@ -420,7 +405,6 @@
         .contact-links a {
             color: var(--text-dim);
             text-decoration: none;
-            font-size: 0.9rem;
             transition: var(--transition-smooth);
         }
 
@@ -428,31 +412,19 @@
             color: var(--accent-gold);
         }
 
-        /* --- FOOTER --- */
         footer {
             text-align: center;
             padding: 40px;
             font-size: 0.85rem;
             color: rgba(255,255,255,0.3);
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-            background: #060b14;
-        }
-
-        /* --- ANIMATIONS & RESPONSIVE --- */
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
         }
 
         @media (max-width: 900px) {
-            .project-media-grid {
-                grid-template-columns: 1fr;
-            }
-            .skills-grid {
+            .project-media-grid, .skills-grid {
                 grid-template-columns: 1fr;
             }
             header {
-                padding: 20px;
                 flex-direction: column;
                 gap: 15px;
             }
@@ -464,11 +436,12 @@
 </head>
 <body>
 
-    <!-- Fond en parallaxe continu -->
-    <div class="parallax-bg"></div>
+    <!-- Structure du Fond Séparée -->
+    <div class="parallax-container">
+        <div class="parallax-bg"></div>
+    </div>
     <div class="ambient-overlay"></div>
 
-    <!-- Menu de Navigation -->
     <header>
         <a href="#accueil" class="logo">Vince<span>D</span></a>
         <nav>
@@ -483,87 +456,53 @@
     </header>
 
     <main>
-        <!-- 1. ACCUEIL & SHOWREEL -->
+        <!-- 1. ACCUEIL -->
         <section id="accueil" class="visible">
             <div class="container hero-content">
                 <h1>VinceD</h1>
                 <p class="subtitle">Musique à l'Image & Design Sonore</p>
-                
                 <div class="showreel-container">
-                    <!-- Remplacer le src par l'iframe Vimeo/YouTube réel ou une balise <video> locale -->
-                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="VinceD - Showreel 2026" allowfullscreen loading="lazy"></iframe>
+                    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="VinceD - Showreel" allowfullscreen></iframe>
                 </div>
-                
                 <a href="#portfolio" class="btn-gold">Explorer les projets</a>
             </div>
         </section>
 
-        <!-- 2. PORTFOLIO / PROJETS -->
+        <!-- 2. PORTFOLIO -->
         <section id="portfolio">
             <div class="container">
                 <h2>Projets Phares</h2>
                 
-                <!-- Projet 1 -->
                 <div class="project-card">
-                    <h3 class="project-title">01. Échos du Crépuscule (Court-métrage de SF)</h3>
+                    <h3 class="project-title">01. Échos du Crépuscule (Court-métrage SF)</h3>
                     <div class="project-media-grid">
-                        <!-- Vidéo synchro -->
                         <div class="media-box">
                             <h4>Extrait Synchronisé</h4>
                             <div class="video-wrapper">
-                                <video controls preload="none" poster="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
-                                    <source src="lien-vers-video-projet1.mp4" type="video/mp4">
-                                </video>
+                                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Project 1" allowfullscreen></iframe>
                             </div>
                         </div>
-                        <!-- Piste audio seule -->
                         <div class="media-box">
-                            <h4>Bande Originale (Audio Seul)</h4>
+                            <h4>Bande Originale (Audio)</h4>
                             <div class="audio-wrapper">
-                                <p>Thème principal orchestral et synthétique.</p>
+                                <p>Thème principal orchestral et textures hybrides.</p>
                                 <audio controls preload="none">
-                                    <source src="lien-vers-audio-projet1.mp3" type="audio/mpeg">
-                                    Votre navigateur ne supporte pas l'élément audio.
+                                    <source src="lien-vers-audio.mp3" type="audio/mpeg">
                                 </audio>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Projet 2 -->
-                <div class="project-card">
-                    <h3 class="project-title">02. Au-delà des Nuages (Documentaire Animalier)</h3>
-                    <div class="project-media-grid">
-                        <div class="media-box">
-                            <h4>Extrait Synchronisé</h4>
-                            <div class="video-wrapper">
-                                <video controls preload="none" poster="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7">
-                                    <source src="lien-vers-video-projet2.mp4" type="video/mp4">
-                                </video>
-                            </div>
-                        </div>
-                        <div class="media-box">
-                            <h4>Bande Originale (Audio Seul)</h4>
-                            <div class="audio-wrapper">
-                                <p>Compositions épurées (Piano, violoncelle et textures organiques).</p>
-                                <audio controls preload="none">
-                                    <source src="lien-vers-audio-projet2.mp3" type="audio/mpeg">
-                                </audio>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </section>
 
-        <!-- 3. BIO / À PROPOS -->
+        <!-- 3. BIO -->
         <section id="propos">
             <div class="container">
                 <h2>À Propos</h2>
                 <div class="bio-content">
-                    <p>Derrière l'alias <strong>VinceD</strong> se cache Vincent Desrochers, compositeur passionné par la narration visuelle. Actuellement étudiant avancé en composition de musique à l’image, il façonne des univers sonores sur-mesure pour sublimer l'intention des réalisateurs et donner une âme aux projets visuels.</p>
-                    <p>Puisant son inspiration autant dans les orchestrations classiques massives que dans les textures électroniques expérimentales et ambiantes (à l'image des ciels tourmentés et profonds), Vincent aborde chaque projet comme une toile blanche où le son devient le prolongement de l'émotion à l'écran.</p>
+                    <p>Derrière l'alias <strong>VinceD</strong> se cache Vincent Desrochers, de l'univers de la composition à l'image. Il façonne des mondes musicaux sur-mesure pour sublimer la vision des réalisateurs et donner une voix harmonique aux récits visuels.</p>
+                    <p>Inspiré par les textures sombres, aériennes et cinématiques (fidèles aux ciels profonds et tourmentés), son travail allie la puissance d'un orchestre moderne à la subtilité de l'électronique ambiante.</p>
                 </div>
             </div>
         </section>
@@ -573,34 +512,28 @@
             <div class="container">
                 <h2>Compétences</h2>
                 <div class="skills-grid">
-                    <!-- Logiciels -->
                     <div class="skills-category">
                         <h3>Logiciels & DAW</h3>
                         <ul>
-                            <li>Cubase Pro / Logic Pro X</li>
-                            <li>Pro Tools (Post-production)</li>
-                            <li>Kontakt / Vienna Ensemble Pro</li>
-                            <li>Wwise (Intégration Jeu Vidéo)</li>
+                            <li>Cubase Pro / Logic Pro</li>
+                            <li>Pro Tools</li>
+                            <li>Kontakt / VEP</li>
                         </ul>
                     </div>
-                    <!-- Instruments -->
                     <div class="skills-category">
                         <h3>Instruments</h3>
                         <ul>
-                            <li>Piano (Cursus classique)</li>
-                            <li>Synthétiseurs analogiques & modulaires</li>
-                            <li>Guitare ambiante / Textures</li>
-                            <li>Écritures et arrangements cordes</li>
+                            <li>Piano (Classique)</li>
+                            <li>Synthétiseurs Modulaires</li>
+                            <li>Sound Design Organique</li>
                         </ul>
                     </div>
-                    <!-- Styles -->
                     <div class="skills-category">
-                        <h3>Styles Maîtrisés</h3>
+                        <h3>Styles</h3>
                         <ul>
-                            <li>Orchestral / Cinématique Épique</li>
-                            <li>Ambient / Électronique Minimaliste</li>
-                            <li>Dark Ambient / Hybride (Horreur, Thriller)</li>
-                            <li>Musique acoustique intimiste</li>
+                            <li>Cinématique Épique</li>
+                            <li>Ambient / Électronique</li>
+                            <li>Hybride & Thriller</li>
                         </ul>
                     </div>
                 </div>
@@ -612,84 +545,60 @@
             <div class="container">
                 <h2>Travaillons Ensemble</h2>
                 <div class="contact-wrapper">
-                    <form action="#" method="POST" onsubmit="event.preventDefault(); alert('Message envoyé avec succès ! (Simulation)');">
+                    <form action="#" method="POST" onsubmit="event.preventDefault(); alert('Message envoyé !');">
                         <div class="form-group">
-                            <label for="name">Nom / Studio</label>
-                            <input type="text" id="name" required placeholder="Votre nom ou structure">
+                            <label>Nom / Studio</label>
+                            <input type="text" required>
                         </div>
                         <div class="form-group">
-                            <label for="email">Adresse Email</label>
-                            <input type="email" id="email" required placeholder="votre@email.com">
+                            <label>Adresse Email</label>
+                            <input type="email" required>
                         </div>
                         <div class="form-group">
-                            <label for="message">Votre Projet</label>
-                            <textarea id="message" rows="5" required placeholder="Décrivez votre projet court-métrage, jeu, publicité..."></textarea>
+                            <label>Votre Projet</label>
+                            <textarea rows="5" required></textarea>
                         </div>
                         <div style="text-align: center;">
-                            <button type="submit" class="btn-gold">Envoyer la proposition</button>
+                            <button type="submit" class="btn-gold">Envoyer</button>
                         </div>
                     </form>
-                    
-                    <div class="contact-links">
-                        <a href="mailto:vincent.desrochers@example.com">vincent.desrochers@example.com</a>
-                        <span>|</span>
-                        <a href="#" target="_blank">LinkedIn</a>
-                        <span>|</span>
-                        <a href="#" target="_blank">SoundCloud</a>
-                    </div>
                 </div>
             </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2026 VinceD - Vincent Desrochers. Tous droits réservés. Musique à l'image.</p>
+        <p>&copy; 2026 VinceD - Vincent Desrochers. Tous droits réservés.</p>
     </footer>
 
-    <!-- --- LOGIQUE ANIMATION ET COMPRESSION DES FLUX --- -->
     <script>
-        // 1. Intersection Observer pour apparition fluide ("Traversée de nuages")
+        // Apparition des sections au scroll
         const sections = document.querySelectorAll('section');
         const navLinks = document.querySelectorAll('.nav-link');
 
-        const observerOptions = {
-            root: null,
-            threshold: 0.2, // La section s'active quand 20% est visible
-            rootMargin: "0px"
-        };
-
-        const sectionObserver = new IntersectionObserver((entries) => {
+        const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('visible');
-                    
-                    // Mise à jour de la navigation active
                     const id = entry.target.getAttribute('id');
                     navLinks.forEach(link => {
-                        if (link.getAttribute('href') === `#${id}`) {
-                            link.classList.add('active');
-                        } else {
-                            link.classList.remove('active');
-                        }
+                        link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
                     });
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.15 });
 
-        sections.forEach(section => {
-            sectionObserver.observe(section);
-        });
+        sections.forEach(section => observer.observe(section));
 
-        // 2. Parallaxe réactif au scroll (légère accentuation en JS en complément du CSS)
+        // Parallaxe au scroll sans conflit CSS
         window.addEventListener('scroll', () => {
             const scrolled = window.pageYOffset;
-            const bg = document.querySelector('.parallax-bg');
-            // Décale doucement le fond en fonction du scroll pour accentuer la profondeur
-            bg.style.transform = `translateY(${scrolled * 0.05}px)`;
+            const container = document.querySelector('.parallax-container');
+            if (container) {
+                // Modifie la position du container parent uniquement
+                container.style.transform = `translateY(${scrolled * 0.15}px)`;
+            }
         });
-
-        // 3. Optimisation Performance : Lazy Loading des Médias (Audio / Vidéo)
-        // Les attributs preload="none" sur les balises empêchent le téléchargement avant clic.
     </script>
 </body>
 </html>
